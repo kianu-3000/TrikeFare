@@ -8,14 +8,21 @@ const Constants = {
         WHITE: '#FFFFFF'
     },
 
-    FONT_SIZE: {
+    SIZE: {
         REGULAR: 16,
         HEADINGS: 24,
-        LABELS: 12
+        LABELS: 12,
+        SMALL: 10,
+    },
+
+    PADDING:{
+        REGULAR: 20,
+        MEDIUM: 40,
+        LARGE: 80
     },
 
     BORDERS: {
-        RADIUS_NORMAL: 20,
+        RADIUS_NORMAL: 24,
         RADIUS_LARGE: 40
     }
 
