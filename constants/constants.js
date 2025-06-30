@@ -13,6 +13,7 @@ const Constants = {
         HEADINGS: 24,
         LABELS: 12,
         SMALL: 10,
+        LARGE: 40
     },
 
     PADDING:{
