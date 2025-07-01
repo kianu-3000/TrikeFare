@@ -5,21 +5,23 @@ const Constants = {
         BLACK: '#050505',
         GRAYISH_WHITE: '#E8E8E8',
         RED: '#D33333',
+        DARK_RED: '#802626',
         WHITE: '#FFFFFF'
     },
 
     SIZE: {
         REGULAR: 16,
-        HEADINGS: 24,
+        HEADINGS: 32,
         LABELS: 12,
         SMALL: 10,
-        LARGE: 40
+        MEDIUM: 24
     },
 
     PADDING:{
-        REGULAR: 20,
+        REGULAR: 24,
         MEDIUM: 40,
-        LARGE: 80
+        LARGE: 80,
+        SMALL: 14
     },
 
     BORDERS: {
