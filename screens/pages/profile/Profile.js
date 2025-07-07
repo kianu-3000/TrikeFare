@@ -36,7 +36,7 @@ const style = StyleSheet.create({
     textTitle: {
         color: Constants.COLORS.WHITE,
         fontSize: Constants.SIZE.HEADINGS,
-        fontWeight: 'bold'
+        fontFamily: 'Montserrat-Bold'
     },
 
     // Choices

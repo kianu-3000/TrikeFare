@@ -4,7 +4,7 @@ import { globalStyle } from '../../../utils/styles';
 import CustomText from '../../../components/CustomText';
 export default function About() {
     return (
-        <View style={[{ backgroundColor: Constants.COLORS.GRAYISH_WHITE }, globalStyle.header]}>
+        <View style={[{ backgroundColor: Constants.COLORS.GRAYISH_WHITE }, globalStyle.container]}>
             {/* Header */}
             <View style={globalStyle.headerContainer}>
                 <CustomText style={globalStyle.textTitle}>About</CustomText>

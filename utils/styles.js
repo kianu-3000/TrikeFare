@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { Constants } from '../constants/constants';
 
 const globalStyle = StyleSheet.create({
-    header: {
+    container: {
         flex: 1,
         paddingTop: Constants.PADDING.REGULAR
     },
@@ -18,7 +18,7 @@ const globalStyle = StyleSheet.create({
     textTitle: {
         color: Constants.COLORS.WHITE,
         fontSize: Constants.SIZE.HEADINGS,
-        fontWeight: 'bold'
+        fontFamily: 'Montserrat-Bold'
     }
 });
 

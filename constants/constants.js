@@ -6,12 +6,14 @@ const Constants = {
         GRAYISH_WHITE: '#E8E8E8',
         RED: '#D33333',
         DARK_RED: '#802626',
-        WHITE: '#FFFFFF'
+        WHITE: '#FFFFFF',
+        FADED_BLACK: '#343341'
     },
 
     SIZE: {
         REGULAR: 16,
         HEADINGS: 32,
+        LARGE: 45,
         LABELS: 12,
         SMALL: 10,
         MEDIUM: 24
