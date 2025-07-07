@@ -1,11 +1,12 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Constants } from '../../../constants/constants';
+import CustomText from '../../../components/CustomText';
 export default function Profile() {
     return (
         <View style={[{ backgroundColor: Constants.COLORS.GRAYISH_WHITE }, style.view]}>
             {/* Header */}
             <View style={style.headerContainer}>
-                <Text style={style.textTitle}>Profile</Text>
+                <CustomText style={style.textTitle}>Profile</CustomText>
             </View>
 
             {/* Choices */}

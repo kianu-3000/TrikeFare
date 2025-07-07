@@ -6,6 +6,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { Constants } from '../constants/constants';
 import Home from './pages/home/Home';
 import Profile from './pages/profile/Profile';
+import About from './pages/about/About';
+import History from './pages/history/History';
+import NewsFeed from './pages/newsFeed/NewsFeed';
+import Rating from './pages/rate/Rate';
 
 
 const Tab = createBottomTabNavigator();
@@ -53,10 +57,10 @@ export default function MainLayout() {
         >
             <Tab.Screen name='Home' component={Home} />
             <Tab.Screen name='Profile' component={Profile} />
-            <Tab.Screen name='About' component={Profile} />
-            <Tab.Screen name='History' component={Home} />
-            <Tab.Screen name='Rate Us' component={Profile} />
-            <Tab.Screen name='News Fare' component={Profile} />
+            <Tab.Screen name='About' component={About} />
+            <Tab.Screen name='History' component={History} />
+            <Tab.Screen name='Rate Us' component={Rating} />
+            <Tab.Screen name='News Fare' component={NewsFeed} />
         </Tab.Navigator>
     )
 }
