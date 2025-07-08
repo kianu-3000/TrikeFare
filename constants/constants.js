@@ -7,7 +7,8 @@ const Constants = {
         RED: '#D33333',
         DARK_RED: '#802626',
         WHITE: '#FFFFFF',
-        FADED_BLACK: '#343341'
+        FADED_BLACK: '#343341',
+        BLUE: '#277fcf'
     },
 
     SIZE: {
@@ -23,10 +24,17 @@ const Constants = {
         REGULAR: 24,
         MEDIUM: 40,
         LARGE: 80,
-        SMALL: 14
+        SMALL: 12
+    },
+    MARGIN:{
+        REGULAR: 24,
+        MEDIUM: 40,
+        LARGE: 80,
+        SMALL: 12
     },
 
     BORDERS: {
+        RADIUS_SMALL: 20,
         RADIUS_NORMAL: 24,
         RADIUS_LARGE: 40
     }
