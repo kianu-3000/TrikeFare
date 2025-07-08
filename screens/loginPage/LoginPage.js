@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import CustomText from '../../components/CustomText';
 import { loginStyle } from './loginPageStyles';
 
-export default function LoginPage({ navigation, login }) {
+export default function LoginPage({ login }) {
     return (
         <KeyboardAvoidingView style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
