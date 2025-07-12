@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Constants } from '../../../constants/constants';
 
-import RegularPage from './Regular';
+import { RegularPage } from './Regular.js';
 import SpecialPage from './Special';
 import CustomText from '../../../components/CustomText';
 
@@ -27,7 +27,7 @@ export default function Home() {
                     },
                     tabBarActiveTintColor: Constants.COLORS.WHITE,
                     tabBarInactiveTintColor: Constants.COLORS.RED,
-                    tabBarIndicatorStyle:{
+                    tabBarIndicatorStyle: {
                         backgroundColor: Constants.COLORS.WHITE
                     }
                 })}>

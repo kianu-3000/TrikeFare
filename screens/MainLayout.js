@@ -14,7 +14,7 @@ import Rating from './pages/rate/Rate';
 
 const Tab = createBottomTabNavigator();
 
-export default function MainLayout() {
+export default function MainLayout({setIsAuthenticated}) {
     return (
         <Tab.Navigator
             initialRouteName='Home'

@@ -8,7 +8,9 @@ const Constants = {
         DARK_RED: '#802626',
         WHITE: '#FFFFFF',
         FADED_BLACK: '#343341',
-        BLUE: '#277fcf'
+        BLUE: '#277fcf',
+        GREEN: '#45de5c',
+        YELLOW: '#f2d635'
     },
 
     SIZE: {

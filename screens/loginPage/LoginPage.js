@@ -1,12 +1,45 @@
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useContext } from 'react';
 import { Constants } from '../../constants/constants';
 import { globalStyle } from '../../utils/styles';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import CustomText from '../../components/CustomText';
 import { loginStyle } from './loginPageStyles';
+import { AuthContext } from '../../context/AuthContext.js';
+import { loginTest } from '../../services/service.js';
 
-export default function LoginPage({ login }) {
+export default function LoginPage() {
+    const [username, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [msg, setMsg] = useState(false);
+    const [data, setData] = useState(null);
+    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+    // const [loadingBar, serLoadingBar] = useState(false);
+
+    // call api login
+    const loginUser = async () => {
+
+        const apiResult = await loginTest(username, password);
+
+        if (apiResult.errorMessage) {
+            console.log(apiResult.errorMessage);
+            setMsg(true);
+            setTimeout(() => {
+                setMsg(false);
+            }, 2000);
+            setData(apiResult.errorMessage);
+        } else {
+            console.log(apiResult.tokenDecoded);
+            setMsg(true);
+            setData(apiResult.msg);
+            await AsyncStorage.setItem('token', apiResult.token);
+            setIsAuthenticated(true); // this triggers page change
+        }
+
+    }
+
     return (
         <KeyboardAvoidingView style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -17,20 +50,24 @@ export default function LoginPage({ login }) {
                 <View style={loginStyle.header}>
                     <CustomText style={loginStyle.label}>Hi! Welcome To</CustomText>
                     <CustomText style={loginStyle.label2}>TrikeFare</CustomText>
+
+                    {/* {loadingBar ? <Text>please wait...</Text> : null} */}
                 </View>
                 <View style={loginStyle.main}>
 
                     <View style={loginStyle.formContainer}>
 
+                        {msg ? <View style={loginStyle.message}><Text style={loginStyle.messageText}>{data}</Text></View> : null}
+
                         <View style={loginStyle.inputContainer}>
                             <Ionicons name={'person'} size={20} color={Constants.COLORS.BLACK} style={loginStyle.icon} />
-                            <TextInput style={loginStyle.formInput} placeholder='Enter Username' />
+                            <TextInput style={loginStyle.formInput} placeholder='Enter Username' onChangeText={setUserName} />
                         </View>
 
 
                         <View style={loginStyle.inputContainer}>
                             <Ionicons name={'lock-closed'} size={20} color={Constants.COLORS.BLACK} style={loginStyle.icon} />
-                            <TextInput style={loginStyle.formInput} placeholder='Enter Password' secureTextEntry={true} />
+                            <TextInput style={loginStyle.formInput} placeholder='Enter Password' secureTextEntry={true} onChangeText={setPassword} />
                         </View>
 
                         <View style={loginStyle.misc}>
@@ -39,7 +76,7 @@ export default function LoginPage({ login }) {
                             </TouchableOpacity>
                         </View>
 
-                        <TouchableOpacity onPress={login}>
+                        <TouchableOpacity onPress={() => { loginUser() }}>
                             <Text style={loginStyle.loginBtn}>Login</Text>
                         </TouchableOpacity>
 
