@@ -1,4 +1,6 @@
-const mainRoute = "http://192.168.1.24:4000/";
+import { Constants } from "../constants/constants";
+const mainRoute = Constants.API_ROUTE.API_ENDPOINT;
+
 const apiRoutes = {
     loginRoute: mainRoute.concat("auth/login")
 }

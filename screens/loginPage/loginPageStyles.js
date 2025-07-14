@@ -94,17 +94,6 @@ const loginStyle = StyleSheet.create({
     createAccountLabel: {
         fontSize: Constants.SIZE.SMALL,
         color: Constants.COLORS.BLUE
-    },
-    message:{
-        backgroundColor: Constants.COLORS.YELLOW,
-        marginBottom: Constants.MARGIN.SMALL,
-        borderRadius: Constants.BORDERS.RADIUS_SMALL,
-        padding: 5,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    messageText:{
-        fontFamily: 'Montserrat-Bold',
     }
 })
 

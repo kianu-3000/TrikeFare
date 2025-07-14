@@ -39,6 +39,10 @@ const Constants = {
         RADIUS_SMALL: 20,
         RADIUS_NORMAL: 24,
         RADIUS_LARGE: 40
+    },
+
+    API_ROUTE: {
+        API_ENDPOINT: "http://192.168.1.24:4000/"
     }
 
 }

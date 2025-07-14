@@ -4,9 +4,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import CreateUserPage from '../screens/pages/createUser/CreateUser.js';
 import MainLayout from '../screens/MainLayout';
 import LoginPage from '../screens/loginPage/LoginPage';
-import { AuthContext, AuthProvider } from '../context/AuthContext.js';
+import { AuthContext } from '../context/AuthContext.js';
 
 const StackNav = createNativeStackNavigator();
 
@@ -15,6 +16,7 @@ function Navigation() { // this is equal to browser router
     return (
         <NavigationContainer>
             <StackNav.Navigator>
+
                 {
                     isAuthenticated ?
                         (<StackNav.Screen name='MainPage' options={{ headerShown: false }}>
@@ -25,6 +27,10 @@ function Navigation() { // this is equal to browser router
                             {(props) => <LoginPage {...props} />}
                         </StackNav.Screen>)
                 }
+                {/* <StackNav.Screen name='CreateUserPage' options={{ headerShown: false }}>
+                    {(props) => <CreateUserPage {...props} />}
+                </StackNav.Screen> */}
+
             </StackNav.Navigator>
         </NavigationContainer>
     );

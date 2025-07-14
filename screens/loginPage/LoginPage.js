@@ -1,37 +1,51 @@
+// External imports
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import React, { useState, useContext } from 'react';
 import { Constants } from '../../constants/constants';
-import { globalStyle } from '../../utils/styles';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Custom Components
 import CustomText from '../../components/CustomText';
 import { loginStyle } from './loginPageStyles';
 import { AuthContext } from '../../context/AuthContext.js';
 import { loginTest } from '../../services/service.js';
+import { CustomMessage } from '../../components/Message.js';
 
-export default function LoginPage() {
+export default function LoginPage({navigation}) {
+
+    // Variables
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
-    const [msg, setMsg] = useState(false);
     const [data, setData] = useState(null);
-    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
-    // const [loadingBar, serLoadingBar] = useState(false);
+
+    const [msg, setMsg] = useState(false);
+    const [messageColor, setMessageColor] = useState(Constants.COLORS.GREEN);
+
+    const { setIsAuthenticated } = useContext(AuthContext);
 
     // call api login
     const loginUser = async () => {
 
         const apiResult = await loginTest(username, password);
-
-        if (apiResult.errorMessage) {
-            console.log(apiResult.errorMessage);
+        if(username == '' && password == ''){
             setMsg(true);
             setTimeout(() => {
                 setMsg(false);
             }, 2000);
+            setMessageColor(Constants.COLORS.YELLOW);
+            setData('Please Input Something');
+        }
+        else if (apiResult.errorMessage) {
+            setMsg(true);
+            setTimeout(() => {
+                setMsg(false);
+            }, 2000);
+            setMessageColor(Constants.COLORS.RED);
             setData(apiResult.errorMessage);
+
         } else {
-            console.log(apiResult.tokenDecoded);
+            setMessageColor(Constants.COLORS.GREEN);
             setMsg(true);
             setData(apiResult.msg);
             await AsyncStorage.setItem('token', apiResult.token);
@@ -40,6 +54,7 @@ export default function LoginPage() {
 
     }
 
+    // Render the component
     return (
         <KeyboardAvoidingView style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -57,7 +72,7 @@ export default function LoginPage() {
 
                     <View style={loginStyle.formContainer}>
 
-                        {msg ? <View style={loginStyle.message}><Text style={loginStyle.messageText}>{data}</Text></View> : null}
+                        {msg ? <CustomMessage color={messageColor} message={data}/> : null}
 
                         <View style={loginStyle.inputContainer}>
                             <Ionicons name={'person'} size={20} color={Constants.COLORS.BLACK} style={loginStyle.icon} />
@@ -82,7 +97,7 @@ export default function LoginPage() {
 
                         <View style={loginStyle.createAccount}>
                             <Text style={loginStyle.label3}>Don't have an account? </Text>
-                            <TouchableOpacity><Text style={loginStyle.createAccountLabel}>Create an account</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => navigation.navigate('CreateUserPage')}><Text style={loginStyle.createAccountLabel}>Create an account</Text></TouchableOpacity>
                         </View>
                     </View>
 
