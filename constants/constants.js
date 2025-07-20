@@ -5,6 +5,7 @@ const Constants = {
         BLACK: '#050505',
         GRAYISH_WHITE: '#E8E8E8',
         RED: '#D33333',
+        RED_TINT: 'rgba(211, 51, 51, 0.15)',
         DARK_RED: '#802626',
         WHITE: '#FFFFFF',
         FADED_BLACK: '#343341',
@@ -42,7 +43,7 @@ const Constants = {
     },
 
     API_ROUTE: {
-        API_ENDPOINT: "http://192.168.1.24:4000/"
+        API_ENDPOINT: "http://10.0.2.2:8000"
     }
 
 }

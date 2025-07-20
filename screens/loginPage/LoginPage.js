@@ -11,8 +11,9 @@ import { loginStyle } from './loginPageStyles';
 import { AuthContext } from '../../context/AuthContext.js';
 import { loginTest } from '../../services/service.js';
 import { CustomMessage } from '../../components/Message.js';
+import CustomLoadingBar from '../../components/CustomLoadingBar.js'; 
 
-export default function LoginPage({navigation}) {
+export default function LoginPage({ navigation }) {
 
     // Variables
     const [username, setUserName] = useState('');
@@ -21,36 +22,42 @@ export default function LoginPage({navigation}) {
 
     const [msg, setMsg] = useState(false);
     const [messageColor, setMessageColor] = useState(Constants.COLORS.GREEN);
+    const [isLoading, setIsLoading] = useState(false);
 
     const { setIsAuthenticated } = useContext(AuthContext);
 
     // call api login
     const loginUser = async () => {
 
-        const apiResult = await loginTest(username, password);
-        if(username == '' && password == ''){
+        if (username == '' || password == '') {
             setMsg(true);
             setTimeout(() => {
                 setMsg(false);
             }, 2000);
             setMessageColor(Constants.COLORS.YELLOW);
-            setData('Please Input Something');
-        }
-        else if (apiResult.errorMessage) {
-            setMsg(true);
-            setTimeout(() => {
-                setMsg(false);
-            }, 2000);
-            setMessageColor(Constants.COLORS.RED);
-            setData(apiResult.errorMessage);
-
+            setData("Please don't leave any blanks");
         } else {
-            setMessageColor(Constants.COLORS.GREEN);
-            setMsg(true);
-            setData(apiResult.msg);
-            await AsyncStorage.setItem('token', apiResult.token);
-            setIsAuthenticated(true); // this triggers page change
+            setIsLoading(true);
+            const apiResult = await loginTest(username, password);
+            setIsLoading(false);
+            if (apiResult.status == 400) {
+                setMsg(true);
+                setTimeout(() => {
+                    setMsg(false);
+                }, 2000);
+                setMessageColor(Constants.COLORS.RED);
+                setData(apiResult.message);
+
+            } else if (apiResult.status == 200) {
+                setMessageColor(Constants.COLORS.GREEN);
+                setMsg(true);
+                setData(apiResult.message);
+                await AsyncStorage.setItem('token', apiResult.access_token);
+                setIsAuthenticated(true); // this triggers page change
+            }
+
         }
+
 
     }
 
@@ -61,6 +68,9 @@ export default function LoginPage({navigation}) {
             keyboardVerticalOffset={-60}
         >
             <View style={loginStyle.container}>
+                {
+                    isLoading ? <CustomLoadingBar/> : null
+                }
                 {/* Header */}
                 <View style={loginStyle.header}>
                     <CustomText style={loginStyle.label}>Hi! Welcome To</CustomText>
@@ -72,7 +82,7 @@ export default function LoginPage({navigation}) {
 
                     <View style={loginStyle.formContainer}>
 
-                        {msg ? <CustomMessage color={messageColor} message={data}/> : null}
+                        {msg ? <CustomMessage color={messageColor} message={data} /> : null}
 
                         <View style={loginStyle.inputContainer}>
                             <Ionicons name={'person'} size={20} color={Constants.COLORS.BLACK} style={loginStyle.icon} />

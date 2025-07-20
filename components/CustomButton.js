@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font';
 
 import CustomText from "./CustomText";
 
-const CustomButton = ({ color, fontSize, fnEvent, onPress }) => {
+const CustomButton = ({ color, fontSize, onPress, text, width }) => {
 
     const [fontsLoaded] = useFonts({
         'Blinker-Bold': require("../assets/fonts/Blinker-Bold.ttf"),
@@ -17,13 +17,13 @@ const CustomButton = ({ color, fontSize, fnEvent, onPress }) => {
     }
 
     return (
-        <View style={[style.container]}>
+        <View style={[style.container, {width: width}]}>
             <TouchableOpacity onPress={onPress}>
                 <CustomText style={[style.text, {
                     backgroundColor: color,
                     fontSize: fontSize,
                 }]}>
-                    Create Account
+                    {text}
                 </CustomText>
             </TouchableOpacity>
         </View>
@@ -39,7 +39,8 @@ const style = StyleSheet.create({
         padding: Constants.PADDING.SMALL,
         paddingLeft: Constants.PADDING.MEDIUM,
         paddingRight: Constants.PADDING.MEDIUM,
-        borderRadius: Constants.BORDERS.RADIUS_SMALL
+        borderRadius: Constants.BORDERS.RADIUS_SMALL,
+        textAlign: 'center'
     }
 })
 

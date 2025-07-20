@@ -2,8 +2,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Constants } from '../../../constants/constants';
 
-import { RegularPage } from './Regular.js';
-import SpecialPage from './Special';
+import { RegularPage } from './regular/Regular.js';
+import { SpecialPage } from './special/Special.js';
 import CustomText from '../../../components/CustomText';
 
 const Tab = createMaterialTopTabNavigator();

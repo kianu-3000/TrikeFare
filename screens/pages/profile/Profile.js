@@ -1,7 +1,16 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Constants } from '../../../constants/constants';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from '../../../context/AuthContext';
+import React, { useContext, useState } from 'react';
 import CustomText from '../../../components/CustomText';
+
 export default function Profile() {
+    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+    const logOut = async () => {
+        await AsyncStorage.removeItem('token');
+        setIsAuthenticated(false);
+    }
     return (
         <View style={[{ backgroundColor: Constants.COLORS.GRAYISH_WHITE }, style.view]}>
             {/* Header */}
@@ -11,6 +20,9 @@ export default function Profile() {
 
             {/* Choices */}
             <View style={style.choicesContainer}>
+                <TouchableOpacity onPress={() => { logOut() }}>
+                    <CustomText style={{ fontFamily: 'Montserrat' }}>Log out</CustomText>
+                </TouchableOpacity>
             </View>
 
             {/* Main Content */}
@@ -26,7 +38,7 @@ const style = StyleSheet.create({
     },
 
     // Header
-    headerContainer: {  
+    headerContainer: {
         flex: 0,
         padding: Constants.PADDING.REGULAR,
         justifyContent: 'center',

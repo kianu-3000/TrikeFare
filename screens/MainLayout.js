@@ -14,7 +14,7 @@ import Rating from './pages/rate/Rate';
 
 const Tab = createBottomTabNavigator();
 
-export default function MainLayout({setIsAuthenticated}) {
+export default function MainLayout({ setIsAuthenticated }) {
     return (
         <Tab.Navigator
             initialRouteName='Home'
@@ -47,12 +47,13 @@ export default function MainLayout({setIsAuthenticated}) {
                 tabBarShowLabel: true,
                 headerShown: false,
                 tabBarStyle: {
+                    flex: 0.07,
                     paddingTop: 10,
                     border: 'none',
                     elevation: 0,
                 },
                 swipeEnabled: true,
-                animation:'shift'
+                animation: 'shift'
             })}
         >
             <Tab.Screen name='Home' component={Home} />

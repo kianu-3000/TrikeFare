@@ -59,6 +59,8 @@ const loginStyle = StyleSheet.create({
         borderRadius: Constants.BORDERS.RADIUS_SMALL,
         paddingLeft: Constants.PADDING.REGULAR,
         paddingRight: Constants.PADDING.REGULAR,
+        paddingTop: Constants.PADDING.SMALL,
+        paddingBottom: Constants.PADDING.SMALL,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
