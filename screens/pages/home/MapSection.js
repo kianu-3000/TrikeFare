@@ -25,17 +25,6 @@ export function MapSection({ navigation, backRoute, isSpecialPage }) {
             <View style={style.map}>
                 <Text>
                     <MapView style={style.map_content} provider={PROVIDER_GOOGLE} initialRegion={initialLocation}>
-                        <Marker
-                            coordinate={{
-                                latitude: 10.319333,
-                                longitude: 123.972028,
-                            }}
-                            title="My Location"
-                        />
-                        <Marker
-                            coordinate={{ latitude: 10.320000, longitude: 123.970000 }}
-                            title="Marker 2"
-                        />
                     </MapView>
                 </Text>
             </View>

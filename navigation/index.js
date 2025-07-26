@@ -18,7 +18,7 @@ function Navigation() { // this is equal to browser router
             <StackNav.Navigator>
 
                 {
-                    isAuthenticated ?
+                    !isAuthenticated ?
                         (<StackNav.Screen name='MainPage' options={{ headerShown: false }}>
                             {(props) => <MainLayout {...props} />}
                         </StackNav.Screen>)

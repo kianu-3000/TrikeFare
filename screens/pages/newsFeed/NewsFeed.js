@@ -10,10 +10,6 @@ export default function NewsFeed() {
                 <CustomText style={globalStyle.textTitle}>NewsFare</CustomText>
             </View>
 
-            {/* Choices */}
-            <View style={globalStyle.choicesContainer}>
-            </View>
-
             {/* Main Content */}
             <View></View>
         </View>

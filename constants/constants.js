@@ -20,7 +20,8 @@ const Constants = {
         LARGE: 45,
         LABELS: 12,
         SMALL: 10,
-        MEDIUM: 24
+        MEDIUM: 24,
+        X_MEDIUM: 20
     },
 
     PADDING:{

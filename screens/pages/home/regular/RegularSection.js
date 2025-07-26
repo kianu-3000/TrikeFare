@@ -61,7 +61,7 @@ export function RegularSection({navigation}) {
             </TouchableOpacity>
 
             <View style={{alignItems: 'center', marginTop: Constants.MARGIN.REGULAR}}>
-                <CustomButton color={Constants.COLORS.BLUE} fontSize={Constants.SIZE.REGULAR} onPress={()=>{}} text={'Done'} width={'50%'} />
+                <CustomButton color={Constants.COLORS.GRAYISH_WHITE} fontSize={Constants.SIZE.REGULAR} onPress={()=>{}} text={'Done'} width={'50%'} />
             </View>
             <View style={{alignItems: 'center', marginTop: Constants.MARGIN.REGULAR}}>
                 <CustomButton color={Constants.COLORS.RED} fontSize={Constants.SIZE.REGULAR} onPress={()=>navigation.navigate('TaripaSection')} text={'Taripa'} width={'50%'} />

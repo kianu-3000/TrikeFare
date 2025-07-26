@@ -41,14 +41,14 @@ export default function Home() {
 
 const style = StyleSheet.create({
     view: {
-        flex: 1,
-        paddingTop: Constants.PADDING.REGULAR
+        flex: 1
     },
 
     // Header
     headerContainer: {
         flex: 0,
         padding: Constants.PADDING.REGULAR,
+        paddingTop: Constants.PADDING.MEDIUM,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: Constants.COLORS.RED
