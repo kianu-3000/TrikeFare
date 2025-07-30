@@ -1,6 +1,6 @@
 // External imports
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
-import React, { useState, useContext } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import React, { useState, useContext, use, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 
 // Custom imports
@@ -11,20 +11,98 @@ import { CustomInput } from '../../../components/CustomInput';
 import CustomText from '../../../components/CustomText';
 import { CustomDropdown } from '../../../components/CustomDropDown';
 import { CustomButton } from '../../../components/CustomButton';
+import { CustomMessage } from '../../../components/CustomMessage';
+import { checkEmptyForms } from '../../../utils/utils';
+import { CustomDatePicker } from '../../../components/CustomDatePicker';
+import CustomRadioButton from '../../../components/CustomRadioButton';
+import { createUser } from '../../../services/service';
+import CustomLoading from '../../../components/CustomLoading';
+import CustomMessageModal from '../../../components/CustomMessageModal';
 
 export default function CreateUserPage({ navigation }) {
 
-    const [data, setData] = useState('');
-    const [selectedGender, setSelectedGender] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    // payload
+    const [selectedGender, setSelectedGender] = useState('male');
+    const [birthDate, setBirthDate] = useState(new Date());
+    const [isCalendarShow, setIsCalendarShow] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [responseMsg, setResponseMsg] = useState('');
+    const [responseStatus, setResponseStatus] = useState('');
+    const [formData, setFormData] = useState({
+        name: '',
+        lastName: '',
+        username: '',
+        mobile: '',
+        idNumber: '',
+        password: '',
+        reEnterPassword: '',
+        gender: ''
+    })
+
+    // validations
+    const [isPasswordCompare, setPasswordCompare] = useState(true);
+    const [isValid, setIsValid] = useState(true);
+
+    const submit = async () => { // submit form to create user
+        formData['gender'] = selectedGender;
+        const isEmpty = checkEmptyForms(formData);
+        // check if there are empty fields
+        if (isEmpty) {
+            setIsValid(false);
+            setTimeout(() => {
+                setIsValid(true);
+            }, 2000);
+        } else {
+            if (formData.password != formData.reEnterPassword) {
+                setPasswordCompare(false);
+                setTimeout(() => {
+                    setPasswordCompare(true);
+                }, 2000);
+            } else {
+                setIsLoading(true);
+                const dataRaw = await createUser(formData);
+                setIsLoading(false);
+                
+                if (dataRaw.status == Constants.STATUS_CODE.INTERNAL_SERVER) {
+                    console.log("Error: " + JSON.stringify(dataRaw));
+                    setModalVisible(true);
+                    setResponseStatus(dataRaw.status);
+                    setResponseMsg(dataRaw.message);
+                    console.log("asdasd"+dataRaw.message)
+                } else if (dataRaw.status == Constants.STATUS_CODE.OK) {
+                    console.log("Passed: " + dataRaw.message);
+                    setModalVisible(true);
+                    setResponseStatus(dataRaw.status);
+                    setResponseMsg(dataRaw.message);
+                } else {
+                    console.log("Error: " + JSON.stringify(dataRaw));
+                    setModalVisible(true);
+                    setResponseStatus(dataRaw.status);
+                    setResponseMsg(dataRaw.message);
+                }
+            }
+        }
+
+    }
+
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
             <View style={createUserStyle.mainContainer}>
+                {
+                    isLoading && <CustomLoading />
+                }
+                <CustomMessageModal
+                    visible={modalVisible}
+                    onClose={() => setModalVisible(false)}
+                    message={responseMsg}
+                    response={responseStatus}
+                />
                 {/* header */}
-                <View style={createUserStyle.header}>
+                <View style={[createUserStyle.header, { flex: 0.3 }]}>
                     <View style={createUserStyle.navigation}>
                         <TouchableOpacity onPress={() => navigation.navigate('LoginPage')} style={createUserStyle.icon}>
                             <Ionicons name={'caret-back-outline'} size={35} color={Constants.COLORS.WHITE} />
@@ -36,96 +114,137 @@ export default function CreateUserPage({ navigation }) {
                 </View>
 
                 {/* Form */}
-                <View style={createUserStyle.form}>
-                    {/* Name Section */}
-                    <View style={createUserStyle.form_Name}>
-                        <CustomInput
-                            fontFamily={'Montserrat'}
-                            color={Constants.COLORS.WHITE}
-                            isSecure={false}
-                            inputValue={setData}
-                            placeholderValue={'Enter First Name'}
-                            flexValue={1} />
+                <ScrollView style={{ flex: 1, marginTop: Constants.MARGIN.SMALL }}>
+                    <View style={createUserStyle.form}>
+                        {/* Name Section */}
+                        {
+                            !isValid ? <CustomMessage fontFamily={''} color={Constants.COLORS.YELLOW} message={'Please don\'t leave empty inputs!'} /> : null
+                        }
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', gap: Constants.SIZE.REGULAR }}>
+                            {/* First Name */}
+                            <View style={{ flex: 1 }}>
+                                <CustomInput
+                                    fontFamily={'Montserrat-Bold'}
+                                    color={Constants.COLORS.WHITE}
+                                    isSecure={false}
+                                    inputValue={(text) =>
+                                        setFormData((prev) => ({ ...prev, name: text }))}
+                                    placeholderValue={'Enter Name'}
+                                    flexValue={0}
+                                    style={[createUserStyle.inputText]} />
+                            </View>
+                            {/* Last Name */}
+                            <View style={{ flex: 1 }}>
+                                <CustomInput
+                                    fontFamily={'Montserrat-Bold'}
+                                    color={Constants.COLORS.WHITE}
+                                    isSecure={false}
+                                    inputValue={(text) =>
+                                        setFormData((prev) => ({ ...prev, lastName: text }))}
+                                    placeholderValue={'Enter Last Name'}
+                                    flexValue={0}
+                                    style={[createUserStyle.inputText]} />
+                            </View>
+                        </View>
+                        {/* Username section */}
+                        <View>
+                            <CustomInput
+                                fontFamily={'Montserrat-Bold'}
+                                color={Constants.COLORS.WHITE}
+                                isSecure={false}
+                                inputValue={(text) =>
+                                    setFormData((prev) => ({ ...prev, username: text }))}
+                                placeholderValue={'Enter username'}
+                                flexValue={0}
+                                style={[createUserStyle.inputText]} />
+                        </View>
+                        {/* Mobile Number section */}
+                        <View>
+                            <CustomInput
+                                fontFamily={'Montserrat-Bold'}
+                                color={Constants.COLORS.WHITE}
+                                isSecure={false}
+                                inputValue={(text) =>
+                                    setFormData((prev) => ({ ...prev, mobile: text }))}
+                                placeholderValue={'Enter Mobile Number'}
+                                flexValue={0}
+                                keyboardTypeValue='numeric'
+                                style={[createUserStyle.inputText]} />
+                        </View>
+                        {/* ID Number section */}
+                        <View>
+                            <CustomInput
+                                fontFamily={'Montserrat-Bold'}
+                                color={Constants.COLORS.WHITE}
+                                isSecure={false}
+                                inputValue={(text) =>
+                                    setFormData((prev) => ({ ...prev, idNumber: text }))}
+                                placeholderValue={'Enter ID Number'}
+                                flexValue={0}
+                                keyboardTypeValue='numeric'
+                                style={[createUserStyle.inputText]} />
+                        </View>
+                        {/* Password section */}
+                        {
+                            !isPasswordCompare ? <CustomMessage fontFamily={''} color={Constants.COLORS.RED} message={'Password doesn\'t match'} /> : null
+                        }
+                        <View>
+                            <CustomInput
+                                fontFamily={'Montserrat-Bold'}
+                                color={Constants.COLORS.WHITE}
+                                isSecure={true}
+                                inputValue={(text) =>
+                                    setFormData((prev) => ({ ...prev, password: text }))}
+                                placeholderValue={'Enter Password'}
+                                flexValue={0}
+                                style={[createUserStyle.inputText]} />
+                        </View>
+                        <View>
+                            <CustomInput
+                                fontFamily={'Montserrat-Bold'}
+                                color={Constants.COLORS.WHITE}
+                                isSecure={true}
+                                inputValue={(text) =>
+                                    setFormData((prev) => ({ ...prev, reEnterPassword: text }))}
+                                placeholderValue={'Re-enter Password'}
+                                flexValue={0}
+                                style={[createUserStyle.inputText]} />
+                        </View>
 
-                        <CustomInput
-                            fontFamily={'Montserrat'}
-                            color={Constants.COLORS.WHITE}
-                            isSecure={false}
-                            inputValue={setData}
-                            placeholderValue={'Enter Last Name'}
-                            flexValue={1} />
+                        {/* Gender */}
+                        <View style={{
+                            padding: Constants.PADDING.SMALL,
+                            backgroundColor: Constants.COLORS.WHITE,
+                            borderRadius: Constants.BORDERS.RADIUS_SMALL
+                        }}>
+                            <CustomText style={[{ fontFamily: 'Montserrat-Bold', textAlign: 'center' }]}>Gender</CustomText>
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                paddingLeft: Constants.PADDING.MEDIUM,
+                                paddingRight: Constants.PADDING.MEDIUM
+                            }}>
+                                {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <TouchableOpacity>
+                                        <Ionicons name={'radio-button-off'} size={24} color={Constants.COLORS.BLACK} />
+                                    </TouchableOpacity>
+                                    <CustomText style={[{ fontFamily: 'Montserrat-Bold', marginLeft: Constants.MARGIN.SMALL }]}>Male</CustomText>
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <TouchableOpacity>
+                                        <Ionicons name={'radio-button-off'} size={24} color={Constants.COLORS.BLACK} />
+                                    </TouchableOpacity>
+                                    <CustomText style={[{ fontFamily: 'Montserrat-Bold', marginLeft: Constants.MARGIN.SMALL }]}>Female</CustomText>
+                                </View> */}
+                                <CustomRadioButton setGender={setSelectedGender} />
+                            </View>
+                        </View>
                     </View>
-                    {/* Email section */}
-                    <View>
-                        <CustomInput
-                            fontFamily={'Montserrat'}
-                            color={Constants.COLORS.WHITE}
-                            isSecure={false}
-                            inputValue={setData}
-                            placeholderValue={'Enter Email'}
-                            flexValue={0} />
-                    </View>
-                    {/* Gender section */}
-                    <View style={{marginBottom: Constants.SIZE.REGULAR}}>
-                        <CustomDropdown
-                            items={[
-                                { label: 'Male', value: 'Male' },
-                                { label: 'Female', value: 'Female' }
-                            ]}
-                            value={selectedGender}
-                            setValue={setSelectedGender}
-                            placeholder="Gender"
-                            style={createUserStyle.dropDown}
-                        />
-                    </View>
-                    {/* Mobile Number section */}
-                    <View>
-                        <CustomInput
-                            fontFamily={'Montserrat'}
-                            color={Constants.COLORS.WHITE}
-                            isSecure={false}
-                            inputValue={setData}
-                            placeholderValue={'Enter Mobile Number'}
-                            flexValue={0}
-                            keyboardTypeValue='numeric' />
-                    </View>
-                    {/* Password section */}
-                    <View>
-                        <CustomInput
-                            fontFamily={'Montserrat'}
-                            color={Constants.COLORS.WHITE}
-                            isSecure={true}
-                            inputValue={setData}
-                            placeholderValue={'Enter Password'}
-                            flexValue={0} />
-                    </View>
-                    <View>
-                        <CustomInput
-                            fontFamily={'Montserrat'}
-                            color={Constants.COLORS.WHITE}
-                            isSecure={true}
-                            inputValue={setData}
-                            placeholderValue={'Re-enter Password'}
-                            flexValue={0} />
-                    </View>
-                    {/* Category section */}
-                    <View style={{marginBottom: Constants.SIZE.REGULAR}}>
-                        <CustomDropdown
-                            items={[
-                                { label: 'Driver', value: 'Driver' },
-                                { label: 'Commuter', value: 'Commuter' }
-                            ]}
-                            value={selectedCategory}
-                            setValue={setSelectedCategory}
-                            placeholder="Select Category"
-                            style={createUserStyle.dropDown}
-                        />
-                    </View>
-                </View>
+                </ScrollView>
 
                 {/* Footer */}
                 <View style={createUserStyle.footer}>
-                    <CustomButton color={Constants.COLORS.RED} fontSize={Constants.SIZE.X_MEDIUM} onPress={()=>{}} text={'Submit'}/>
+                    <CustomButton color={Constants.COLORS.RED} fontSize={Constants.SIZE.X_MEDIUM} onPress={() => { submit() }} text={'Submit'} />
                 </View>
             </View>
         </KeyboardAvoidingView>

@@ -57,11 +57,11 @@ export default function MainLayout({ setIsAuthenticated }) {
             })}
         >
             <Tab.Screen name='Home' component={Home} />
-            <Tab.Screen name='Profile' component={Profile} />
             <Tab.Screen name='About' component={About} />
             <Tab.Screen name='History' component={History} />
             <Tab.Screen name='Rate Us' component={Rating} />
             <Tab.Screen name='News Fare' component={NewsFeed} />
+            <Tab.Screen name='Profile' component={Profile} />
         </Tab.Navigator>
     )
 }

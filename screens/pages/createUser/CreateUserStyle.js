@@ -24,19 +24,18 @@ const createUserStyle = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: Constants.PADDING.SMALL,
         paddingRight: Constants.PADDING.SMALL,
-    },  
+    },
     headerTitleText: {
         fontFamily: 'Montserrat-Bold',
         fontSize: Constants.SIZE.HEADINGS,
         color: Constants.COLORS.WHITE
     },
     form: {
-        flex: 1,
         backgroundColor: Constants.COLORS.GRAYISH_WHITE,
         paddingLeft: Constants.PADDING.REGULAR,
         paddingRight: Constants.PADDING.REGULAR,
         // paddingTop: Constants.PADDING.REGULAR,
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     form_Name: {
         flexDirection: 'row',
@@ -49,15 +48,29 @@ const createUserStyle = StyleSheet.create({
     navigation: {
         backgroundColor: Constants.COLORS.RED
     },
-    dropDown:{
+    dropDown: {
         backgroundColor: Constants.COLORS.WHITE,
         borderRadius: Constants.BORDERS.RADIUS_SMALL
     },
     footer: {
-        padding: 20,
+        // padding: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: Constants.PADDING.LARGE
+        paddingTop: Constants.PADDING.SMALL,
+        paddingBottom: Constants.PADDING.MEDIUM
+    },
+    datePicker: {
+        backgroundColor: Constants.COLORS.BLUE,
+        padding: Constants.PADDING.SMALL,
+        borderRadius: Constants.BORDERS.RADIUS_SMALL
+    },
+    datePickerText: {
+        fontFamily: 'Montserrat-Bold',
+        color: Constants.COLORS.WHITE,
+        textAlign: 'center'
+    },
+    inputText:{
+        padding: Constants.PADDING.LARGE
     }
 });
 

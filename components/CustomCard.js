@@ -17,7 +17,7 @@ const CustomCard = ({ details, pressFunc }) => {
         <View style={[style.card]}>
 
             <View style={style.icon}>
-                <Ionicons name={'person-circle'} size={64} color={Constants.COLORS.BLACK} />
+                <Ionicons name={'person-circle'} size={32} color={Constants.COLORS.BLACK} />
             </View>
 
             <View style={style.details}>
@@ -25,37 +25,26 @@ const CustomCard = ({ details, pressFunc }) => {
                 {/* Name */}
                 <View style={[{ flexDirection: 'row' }]}>
                     <CustomText style={[style.messageLabel, { color: Constants.COLORS.BLACK }]}>Name: </CustomText>
-                    <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.name}</CustomText>
-                </View>
-
-                {/* Plate No */}
-                <View style={[style.details, { flexDirection: 'row' }]}>
-                    <CustomText style={[style.messageLabel, { color: Constants.COLORS.BLACK }]}>Plate Number: </CustomText>
-                    <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.plateNumber}</CustomText>
+                    <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.driverid}</CustomText>
                 </View>
 
                 {/* Date */}
                 <View style={[style.details, { flexDirection: 'row' }]}>
                     <CustomText style={[style.messageLabel, { color: Constants.COLORS.RED }]}>Date: </CustomText>
-                    <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.date}</CustomText>
+                    <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.created_at}</CustomText>
                 </View>
 
-                {/* Time */}
-                <View style={[style.details, { flexDirection: 'row' }]}>
-                    <CustomText style={[style.messageLabel, { color: Constants.COLORS.RED }]}>Time: </CustomText>
-                    <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.time}</CustomText>
-                </View>
 
                 {/* Pick Up Loc */}
                 <View style={[style.details, { flexDirection: 'row' }]}>
                     <CustomText style={[style.messageLabel, { color: Constants.COLORS.BLUE }]}>Pickup Location: </CustomText>
-                    <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.pickUpLoc}</CustomText>
+                    <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.location_from}</CustomText>
                 </View>
 
                 {/* Drop off Loc */}
                 <View style={[style.details, { flexDirection: 'row' }]}>
                     <CustomText style={[style.messageLabel, { color: Constants.COLORS.RED }]}>Drop-off Location: </CustomText>
-                    <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.dropOffLoc}</CustomText>
+                    <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.location_to}</CustomText>
                 </View>
 
             </View>
@@ -77,7 +66,6 @@ const style = StyleSheet.create({
         backgroundColor: Constants.COLORS.WHITE,
         borderRadius: Constants.BORDERS.RADIUS_SMALL,
         padding: Constants.PADDING.SMALL,
-        elevation: 5,
         marginBottom: Constants.MARGIN.SMALL
     },
     messageLabel: {
@@ -89,9 +77,10 @@ const style = StyleSheet.create({
         fontSize: Constants.SIZE.LABELS
     },
     details: {
+        flex: 0,
     },
     more: {
-        flex: 1,
+        flex: 0,
         flexDirection: 'row',
         justifyContent: 'flex-end'
     }

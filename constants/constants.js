@@ -11,7 +11,8 @@ const Constants = {
         FADED_BLACK: '#343341',
         BLUE: '#277fcf',
         GREEN: '#45de5c',
-        YELLOW: '#f2d635'
+        YELLOW: '#f2d635',
+        GRAY: '#777777'
     },
 
     SIZE: {
@@ -28,7 +29,8 @@ const Constants = {
         REGULAR: 24,
         MEDIUM: 40,
         LARGE: 80,
-        SMALL: 12
+        SMALL: 12,
+        XSMALL: 5
     },
     MARGIN:{
         REGULAR: 24,
@@ -44,7 +46,14 @@ const Constants = {
     },
 
     API_ROUTE: {
-        API_ENDPOINT: "http://10.0.2.2:8000"
+        API_ENDPOINT: "http://10.0.2.2:8000/api"
+    },
+    STATUS_CODE: {
+        OK: 200,
+        CREATED: 201,
+        NOT_FOUND: 404,
+        BAD_REQUEST: 400,
+        INTERNAL_SERVER: 500
     }
 
 }

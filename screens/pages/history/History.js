@@ -4,77 +4,58 @@ import { globalStyle } from '../../../utils/styles';
 import CustomText from '../../../components/CustomText';
 import { CustomCard } from '../../../components/CustomCard';
 import { CustomModal } from '../../../components/CustomModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import { getHistory } from '../../../services/service';
+import CustomLoadingBar from '../../../components/CustomLoadingBar';
+import CustomLoading from '../../../components/CustomLoading';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export default function History() {
     const [isModal, setIsModal] = useState(false);
     const [viewData, setViewData] = useState({});
+    const [getHistoryData, setGetHistoryData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const getHist = async () => {
+        try {
+            setIsLoading(true);
+            const data = await getHistory();
+            setIsLoading(false);
+            setGetHistoryData(data.users);
+            console.log("New data updateds:", getHistoryData);
+        } catch (err) {
+            console.log('Error getting data: ' + err)
+        }
+    }
+    useEffect(() => {
+        getHist();
+    }, [])
+
+    useEffect(() => {
+        if (getHistoryData) {
+            console.log("New data updateds:", getHistoryData);
+        }
+    }, [getHistoryData]);
 
     const openModal = (trigger, data) => {
         setIsModal(trigger);
         if (data) {
-            viewData.name = data.name
-            viewData.plateNumber = data.plateNumber
-            viewData.date = data.date
-            viewData.time = data.time
-            viewData.pickUpLoc = data.pickUpLoc
-            viewData.dropOffLoc = data.dropOffLoc
+            viewData.name = data.passengerid
+            viewData.date = data.created_at
+            viewData.pickUpLoc = data.location_from
+            viewData.dropOffLoc = data.location_to
             viewData.distance = data.distance
             viewData.fare = data.fare
-            viewData.ride = data.ride
         }
     }
 
-    const data = [
-        {
-            name: "Kianu",
-            plateNumber: "XXX-123-ZQB",
-            date: "25-07-2-25",
-            time: "10:23 pm",
-            pickUpLoc: "San Isidro",
-            dropOffLoc: "California, USA",
-            distance: "1650.67 km",
-            fare: "Php 150,675.00",
-            ride: "Special"
-        },
-        {
-            name: "Invoker Kael",
-            plateNumber: "QQWER-750",
-            date: "25-07-2-25",
-            time: "10:23 pm",
-            pickUpLoc: "San Isidro",
-            dropOffLoc: "California, USA",
-            distance: "1650.67 km",
-            fare: "Php 150,675.00",
-            ride: "Special"
-        },
-        {
-            name: "Lalatina",
-            plateNumber: "DRKNSS-404",
-            date: "25-07-2-25",
-            time: "10:23 pm",
-            pickUpLoc: "San Isidro",
-            dropOffLoc: "Tokyo, Japan",
-            distance: "2500.67 km",
-            fare: "Php 350,675.00",
-            ride: "Special"
-        },
-        {
-            name: "Lalatina",
-            plateNumber: "DRKNSS-404",
-            date: "25-07-2-25",
-            time: "10:23 pm",
-            pickUpLoc: "San Isidro",
-            dropOffLoc: "Tokyo, Japan",
-            distance: "2500.67 km",
-            fare: "Php 350,675.00",
-            ride: "Special"
-        }
-    ]
     return (
         <View style={[{ backgroundColor: Constants.COLORS.GRAYISH_WHITE, position: 'relative' }, globalStyle.container]}>
             {/* Header */}
+            {
+                isLoading ? <CustomLoading /> : null
+            }
             <View style={globalStyle.headerContainer}>
                 <CustomText style={globalStyle.textTitle}>History</CustomText>
             </View>
@@ -82,7 +63,7 @@ export default function History() {
             {/* Main Content */}
             <ScrollView style={style.main}>
                 {
-                    data.map((data, index) => {
+                    getHistoryData.map((data, index) => {
                         return (
                             <CustomCard details={data} key={index} pressFunc={() => openModal(true, data)} />
                         )
@@ -95,7 +76,7 @@ export default function History() {
                     <View style={style.modalContainer}>
                         {/* modal top bar */}
                         <View style={style.modalTopBar}>
-                            <Ionicons name={'person-circle'} size={124} color={Constants.COLORS.BLACK} />
+                            <Ionicons name={'person-circle'} size={64} color={Constants.COLORS.BLACK} />
                             <View style={{ marginLeft: Constants.MARGIN.SMALL }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Ionicons name={'star'} size={30} color={Constants.COLORS.YELLOW} />
@@ -110,27 +91,21 @@ export default function History() {
                             </View>
                         </View>
                         {/* modal details */}
-                        <View style={{ paddingTop: Constants.PADDING.MEDIUM }}>
+                        <View style={{ paddingTop: Constants.PADDING.SMALL }}>
                             <CustomText style={style.text}>
                                 Date: <CustomText style={[style.detailsText]}>{viewData.date}</CustomText>
                             </CustomText>
                             <CustomText style={style.text}>
                                 Time: <CustomText style={[style.detailsText]}>{viewData.time}</CustomText>
                             </CustomText>
-                            <CustomText style={[style.text, {marginTop: Constants.MARGIN.REGULAR}]}>
+                            <CustomText style={[style.text]}>
                                 Pickup Location: <CustomText style={[style.detailsText]}>{viewData.pickUpLoc}</CustomText>
                             </CustomText>
                             <CustomText style={style.text}>
                                 Drop-off Location: <CustomText style={[style.detailsText]}>{viewData.dropOffLoc}</CustomText>
                             </CustomText>
                             <CustomText style={style.text}>
-                                Distance: <CustomText style={[style.detailsText]}>{viewData.distance}</CustomText>
-                            </CustomText>
-                            <CustomText style={style.text}>
                                 Fare: <CustomText style={[style.detailsText]}>{viewData.fare}</CustomText>
-                            </CustomText>
-                            <CustomText style={style.text}>
-                                Ride: <CustomText style={[style.detailsText]}>{viewData.ride}</CustomText>
                             </CustomText>
                         </View>
 
@@ -154,7 +129,7 @@ const style = StyleSheet.create({
         fontSize: Constants.SIZE.REGULAR
     },
     modalContainer: {
-        flex: 1
+        flex: 1,
     },
     modalTopBar: {
         flexDirection: 'row',

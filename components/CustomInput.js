@@ -14,7 +14,7 @@ const CustomInput = ({ fontFamily, color, isSecure, inputValue, placeholderValue
     return (
         <View style={[style.message, { backgroundColor: color, flex: flexValue}]}>
             <TextInput
-                style={[style.messageText, { fontFamily: fontFamily }]}
+                style={[style.messageText, { fontFamily: fontFamily, padding: Constants.PADDING.SMALL }]}
                 secureTextEntry={isSecure}
                 onChangeText={inputValue}
                 placeholder={placeholderValue}

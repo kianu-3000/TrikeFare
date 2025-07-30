@@ -40,6 +40,6 @@ const style = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: Constants.COLORS.RED_TINT,
-        zIndex: 1000
+        zIndex: 10000
     }
 })
