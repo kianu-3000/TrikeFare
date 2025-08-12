@@ -1,9 +1,9 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AuthContext = createContext({
     isAuthenticated: false,
-    setIsAuthenticated: () => {},
+    setIsAuthenticated: () => { },
 });
 
 const AuthProvider = ({ children }) => {
@@ -18,10 +18,32 @@ const AuthProvider = ({ children }) => {
     // }, []);
 
     return (
-        <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated}}>
+        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
             {children}
         </AuthContext.Provider>
     );
 }
 
-export { AuthContext, AuthProvider };
+const DestinationContext = createContext();
+const DestinationProvider = ({ children }) => {
+    const [startLoc, setStartLoc] = useState({});
+    const [destLoc, setDestLoc] = useState({});
+    const [pinType, setPinType] = useState(null);
+
+    return (
+        <DestinationContext.Provider value={{ startLoc, setStartLoc, destLoc, setDestLoc, pinType, setPinType }}>
+            {children}
+        </DestinationContext.Provider>
+    )
+}
+const useDestination = () => {
+    return useContext(DestinationContext);
+}
+
+export {
+    AuthContext,
+    AuthProvider,
+    DestinationProvider,
+    DestinationContext,
+    useDestination
+};

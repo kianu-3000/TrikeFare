@@ -11,8 +11,8 @@ const CustomRadioButton = ({setGender}) => {
     }
 
     const options = [
-        { label: 'Male', value: 'male' },
-        { label: 'Female', value: 'female' },
+        { label: 'Male', value: 'M' },
+        { label: 'Female', value: 'F' },
     ];
 
     return (

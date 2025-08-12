@@ -30,7 +30,7 @@ const Constants = {
         MEDIUM: 40,
         LARGE: 80,
         SMALL: 12,
-        XSMALL: 5
+        X_SMALL: 5
     },
     MARGIN:{
         REGULAR: 24,
@@ -46,7 +46,8 @@ const Constants = {
     },
 
     API_ROUTE: {
-        API_ENDPOINT: "http://10.0.2.2:8000/api"
+        API_ENDPOINT: "http://10.0.2.2:8000/api",
+        API_MAPS: "https://api.openrouteservice.org/"
     },
     STATUS_CODE: {
         OK: 200,
@@ -54,6 +55,14 @@ const Constants = {
         NOT_FOUND: 404,
         BAD_REQUEST: 400,
         INTERNAL_SERVER: 500
+    },
+    API_KEY: {
+        OPEN_ROUTE_SERVICE: 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImM2ZjFmMzkyMmJhNDQzNDg4MjU2YTY5NzBkZWVmZDVkIiwiaCI6Im11cm11cjY0In0=',
+        MAP_TILER: 'PXgcExy1xLEgxcR82Uip'
+    },
+    PIN_TYPE: {
+        PICK_UP: 'pickUp',
+        DROP_OFF: 'dropOff'
     }
 
 }

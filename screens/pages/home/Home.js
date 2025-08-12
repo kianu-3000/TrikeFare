@@ -5,37 +5,40 @@ import { Constants } from '../../../constants/constants';
 import { RegularPage } from './regular/Regular.js';
 import { SpecialPage } from './special/Special.js';
 import CustomText from '../../../components/CustomText';
+import { DestinationProvider } from '../../../context/AuthContext.js';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function Home() {
     return (
-        <View style={style.view}>
-            <View style={style.headerContainer}>
-                <CustomText style={style.textTitle}>TrikeFare</CustomText>
+        <DestinationProvider>
+            <View style={style.view}>
+                <View style={style.headerContainer}>
+                    <CustomText style={style.textTitle}>TrikeFare</CustomText>
+                </View>
+
+                <Tab.Navigator initialRouteName='Regular'
+                    screenOptions={({ route, navigation }) => ({
+                        tabBarStyle: {
+                            backgroundColor: Constants.COLORS.DARK_RED,
+                            elevation: 0
+                        },
+                        tabBarLabelStyle: {
+                            fontSize: Constants.SIZE.REGULAR,
+                            fontWeight: 'bold'
+                        },
+                        tabBarActiveTintColor: Constants.COLORS.WHITE,
+                        tabBarInactiveTintColor: Constants.COLORS.RED,
+                        tabBarIndicatorStyle: {
+                            backgroundColor: Constants.COLORS.WHITE
+                        }
+                    })}>
+                    <Tab.Screen name='Regular' component={RegularPage} />
+                    <Tab.Screen name='Special' component={SpecialPage} />
+                </Tab.Navigator>
+
             </View>
-
-            <Tab.Navigator initialRouteName='Regular'
-                screenOptions={({ route, navigation }) => ({
-                    tabBarStyle: {
-                        backgroundColor: Constants.COLORS.DARK_RED,
-                        elevation: 0
-                    },
-                    tabBarLabelStyle: {
-                        fontSize: Constants.SIZE.REGULAR,
-                        fontWeight: 'bold'
-                    },
-                    tabBarActiveTintColor: Constants.COLORS.WHITE,
-                    tabBarInactiveTintColor: Constants.COLORS.RED,
-                    tabBarIndicatorStyle: {
-                        backgroundColor: Constants.COLORS.WHITE
-                    }
-                })}>
-                <Tab.Screen name='Regular' component={RegularPage} />
-                <Tab.Screen name='Special' component={SpecialPage} />
-            </Tab.Navigator>
-
-        </View>
+        </DestinationProvider>
     )
 }
 

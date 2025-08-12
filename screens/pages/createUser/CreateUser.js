@@ -29,6 +29,17 @@ export default function CreateUserPage({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [responseMsg, setResponseMsg] = useState('');
     const [responseStatus, setResponseStatus] = useState('');
+    const initialFormData = {
+        name: '',
+        lastName: '',
+        username: '',
+        mobile: '',
+        idNumber: '',
+        password: '',
+        reEnterPassword: '',
+        gender: '',
+        email: ''
+    };
     const [formData, setFormData] = useState({
         name: '',
         lastName: '',
@@ -37,7 +48,8 @@ export default function CreateUserPage({ navigation }) {
         idNumber: '',
         password: '',
         reEnterPassword: '',
-        gender: ''
+        gender: '',
+        email: ''
     })
 
     // validations
@@ -63,20 +75,17 @@ export default function CreateUserPage({ navigation }) {
                 setIsLoading(true);
                 const dataRaw = await createUser(formData);
                 setIsLoading(false);
-                
+                console.log(JSON.stringify(dataRaw));
                 if (dataRaw.status == Constants.STATUS_CODE.INTERNAL_SERVER) {
-                    console.log("Error: " + JSON.stringify(dataRaw));
                     setModalVisible(true);
                     setResponseStatus(dataRaw.status);
                     setResponseMsg(dataRaw.message);
-                    console.log("asdasd"+dataRaw.message)
                 } else if (dataRaw.status == Constants.STATUS_CODE.OK) {
-                    console.log("Passed: " + dataRaw.message);
+                    setFormData(initialFormData);
                     setModalVisible(true);
                     setResponseStatus(dataRaw.status);
                     setResponseMsg(dataRaw.message);
                 } else {
-                    console.log("Error: " + JSON.stringify(dataRaw));
                     setModalVisible(true);
                     setResponseStatus(dataRaw.status);
                     setResponseMsg(dataRaw.message);
@@ -184,6 +193,19 @@ export default function CreateUserPage({ navigation }) {
                                 keyboardTypeValue='numeric'
                                 style={[createUserStyle.inputText]} />
                         </View>
+                        {/* ID Number section */}
+                        <View>
+                            <CustomInput
+                                fontFamily={'Montserrat-Bold'}
+                                color={Constants.COLORS.WHITE}
+                                isSecure={false}
+                                inputValue={(text) =>
+                                    setFormData((prev) => ({ ...prev, email: text }))}
+                                placeholderValue={'Enter Email'}
+                                flexValue={0}
+                                keyboardTypeValue='numeric'
+                                style={[createUserStyle.inputText]} />
+                        </View>
                         {/* Password section */}
                         {
                             !isPasswordCompare ? <CustomMessage fontFamily={''} color={Constants.COLORS.RED} message={'Password doesn\'t match'} /> : null
@@ -224,18 +246,6 @@ export default function CreateUserPage({ navigation }) {
                                 paddingLeft: Constants.PADDING.MEDIUM,
                                 paddingRight: Constants.PADDING.MEDIUM
                             }}>
-                                {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <TouchableOpacity>
-                                        <Ionicons name={'radio-button-off'} size={24} color={Constants.COLORS.BLACK} />
-                                    </TouchableOpacity>
-                                    <CustomText style={[{ fontFamily: 'Montserrat-Bold', marginLeft: Constants.MARGIN.SMALL }]}>Male</CustomText>
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <TouchableOpacity>
-                                        <Ionicons name={'radio-button-off'} size={24} color={Constants.COLORS.BLACK} />
-                                    </TouchableOpacity>
-                                    <CustomText style={[{ fontFamily: 'Montserrat-Bold', marginLeft: Constants.MARGIN.SMALL }]}>Female</CustomText>
-                                </View> */}
                                 <CustomRadioButton setGender={setSelectedGender} />
                             </View>
                         </View>

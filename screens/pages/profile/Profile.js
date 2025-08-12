@@ -84,7 +84,7 @@ export default function Profile() {
 
     const logOut = async () => {
         await AsyncStorage.removeItem('token');
-        // await AsyncStorage.removeItem('user');
+        await AsyncStorage.removeItem('user');
         // await AsyncStorage.removeItem('fullname');
         // await AsyncStorage.removeItem('contact');
         setIsAuthenticated(false);
@@ -176,7 +176,7 @@ export default function Profile() {
                                 <TextInput keyboardType="number-pad"  editable={edit}  style={[profileStyles.formInput, !contactNumber && edit && { borderWidth: 2, borderColor: Constants.COLORS.RED }]} value={contactNumber} onChangeText={setContactNumber} />
                             </View>
                             <View style={profileStyles.inputContainer1}>
-                                <CustomText style={profileStyles.formLabel}>Driver License</CustomText>
+                                <CustomText style={profileStyles.formLabel}>Passenger Id</CustomText>
                                 <TextInput  editable={edit}  style={[profileStyles.formInput, !license && edit && { borderWidth: 2, borderColor: Constants.COLORS.RED }]} value={license} onChangeText={setLicense} />
                             </View>
                             <View style={profileStyles.inputContainer1}>

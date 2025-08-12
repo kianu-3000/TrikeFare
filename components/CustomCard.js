@@ -24,7 +24,7 @@ const CustomCard = ({ details, pressFunc }) => {
 
                 {/* Name */}
                 <View style={[{ flexDirection: 'row' }]}>
-                    <CustomText style={[style.messageLabel, { color: Constants.COLORS.BLACK }]}>Name: </CustomText>
+                    <CustomText style={[style.messageLabel, { color: Constants.COLORS.BLACK }]}>Driver Email: </CustomText>
                     <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.driverid}</CustomText>
                 </View>
 
@@ -77,7 +77,7 @@ const style = StyleSheet.create({
         fontSize: Constants.SIZE.LABELS
     },
     details: {
-        flex: 0,
+        flex: 1,
     },
     more: {
         flex: 0,

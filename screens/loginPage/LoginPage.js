@@ -40,6 +40,7 @@ export default function LoginPage({ navigation }) {
             setIsLoading(true);
             const apiResult = await loginTest(username, password);
             setIsLoading(false);
+            console.log(apiResult);
             if (apiResult.status == 400) {
                 setMsg(true);
                 setTimeout(() => {
@@ -53,6 +54,7 @@ export default function LoginPage({ navigation }) {
                 setMsg(true);
                 setData(apiResult.message);
                 await AsyncStorage.setItem('token', apiResult.access_token);
+                await AsyncStorage.setItem('user', apiResult.user);
                 setIsAuthenticated(true); // this triggers page change
             }
 

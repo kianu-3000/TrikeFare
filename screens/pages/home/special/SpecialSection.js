@@ -8,15 +8,20 @@ import { AuthContext } from '../../../../context/AuthContext.js';
 import { Ionicons } from '@expo/vector-icons';
 
 import { CustomButton } from '../../../../components/CustomButton.js';
+import { useDestination } from '../../../../context/AuthContext.js';
 
 export default function SpecialSectionPage({ navigation }) {
     const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
     const [iconPickup, setIconPickup] = useState('radio-button-off');
     const [iconDropOff, setIconDropOff] = useState('radio-button-off');
-
+    const { pinType, setPinType } = useDestination();
     return (
         <View style={{ flex: 1, padding: Constants.PADDING.REGULAR }}>
-            <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('MapSection')}>
+            <TouchableOpacity activeOpacity={0.8} onPress={() => {
+                setPinType(Constants.PIN_TYPE.PICK_UP);
+                navigation.navigate('MapSection');
+            }
+            }>
                 <View style={style.card}>
                     <View style={style.card_right}>
                         <Ionicons name={iconPickup} size={24} color={Constants.COLORS.RED} />
@@ -28,7 +33,11 @@ export default function SpecialSectionPage({ navigation }) {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('MapSection')}>
+            <TouchableOpacity activeOpacity={0.8} onPress={() => {
+                setPinType(Constants.PIN_TYPE.DROP_OFF);
+                navigation.navigate('MapSection');
+            }
+            }>
                 <View style={style.card}>
                     <View style={style.card_right}>
                         <Ionicons name={iconDropOff} size={24} color={Constants.COLORS.BLUE} />
