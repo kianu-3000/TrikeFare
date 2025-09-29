@@ -37,13 +37,13 @@ const CustomCard = ({ details, pressFunc }) => {
 
                 {/* Pick Up Loc */}
                 <View style={[style.details, { flexDirection: 'row' }]}>
-                    <CustomText style={[style.messageLabel, { color: Constants.COLORS.BLUE }]}>Pickup Location: </CustomText>
+                    <CustomText style={[style.messageLabel, { color: Constants.COLORS.BLACK }]}>Pickup Location: </CustomText>
                     <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.location_from}</CustomText>
                 </View>
 
                 {/* Drop off Loc */}
                 <View style={[style.details, { flexDirection: 'row' }]}>
-                    <CustomText style={[style.messageLabel, { color: Constants.COLORS.RED }]}>Drop-off Location: </CustomText>
+                    <CustomText style={[style.messageLabel, { color: Constants.COLORS.BLACK }]}>Drop-off Location: </CustomText>
                     <CustomText style={[style.messageValue, { color: Constants.COLORS.BLACK }]}>{details.location_to}</CustomText>
                 </View>
 

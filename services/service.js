@@ -12,7 +12,7 @@ export const loginTest = async (username, password) => { //test login
         });
         return await res.json();
     } catch (err) {
-        console.log(err);
+        console.log('ERR');
     }
 }
 
@@ -108,6 +108,123 @@ export const fetchNewsFare = async (sortOrder, dateFilter) => {
     } catch (err) {
         console.error('Error fetching news fare:', err);
     }
+};
+
+
+export const createAppRating = async (experience, rating, suggestion) => {
+    try {
+        const token = await AsyncStorage.getItem('token');
+        console.log(token)
+        const res = await fetch(apiRoutes.createRating, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                experience,
+                rating,
+                suggestion,
+            }),
+        });
+
+        return await res.json();
+
+    } catch (err) {
+        console.log('Error encountered:', err);
+    }
+};
+
+export const createBooking = async (fare, location_from, location_to, distance, rate, category, coordinates_to_lat, coordinates_to_long, coordinates_from_lat, coordinates_from_long) => {
+    try {
+        console.log({
+            data: {
+                fare,
+                location_from,
+                location_to,
+                distance,
+                rate,
+                category,
+                coordinates_to_lat,
+                coordinates_to_long,
+                coordinates_from_lat,
+                coordinates_from_long
+            }
+        })
+        const token = await AsyncStorage.getItem('token');
+        console.log(token)
+        const res = await fetch(apiRoutes.createBooking, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                fare,
+                location_from,
+                location_to,
+                distance,
+                rate,
+                category,
+                coordinates_to_lat,
+                coordinates_to_long,
+                coordinates_from_lat,
+                coordinates_from_long
+            }),
+        });
+
+        return await res.json();
+
+    } catch (err) {
+        console.log('Error encountered:', err);
+    }
+};
+
+export const cancelBooking = async (bookId) => {
+    try {
+        const token = await AsyncStorage.getItem('token');
+        console.log("ID Book: ",bookId)
+        const res = await fetch(apiRoutes.cancelBooking, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                bookId
+            }),
+        });
+
+        return await res.json();
+
+    } catch (err) {
+        console.log('Error encountered:', err);
+    }
+    
+};
+
+export const acceptBooking = async (bookId, driverId) => {
+    try {
+        const token = await AsyncStorage.getItem('token');
+        console.log("ID Book: ",bookId)
+        const res = await fetch(apiRoutes.acceptBooking, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                bookId,
+                driverId
+            }),
+        });
+
+        return await res.json();
+
+    } catch (err) {
+        console.log('Error encountered:', err);
+    }
+    
 };
 
 

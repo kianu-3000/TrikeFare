@@ -8,6 +8,7 @@ const AuthContext = createContext({
 
 const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [mapSessionStart, setMapSessionStart] = useState(true);
 
     // useEffect(() => {
     //     const checkToken = async () => {
@@ -18,7 +19,7 @@ const AuthProvider = ({ children }) => {
     // }, []);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, mapSessionStart, setMapSessionStart }}>
             {children}
         </AuthContext.Provider>
     );
@@ -36,9 +37,11 @@ const DestinationProvider = ({ children }) => {
         </DestinationContext.Provider>
     )
 }
+
 const useDestination = () => {
     return useContext(DestinationContext);
 }
+
 
 export {
     AuthContext,

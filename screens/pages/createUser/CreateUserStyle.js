@@ -21,7 +21,6 @@ const createUserStyle = StyleSheet.create({
     headerTitle: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
         paddingLeft: Constants.PADDING.SMALL,
         paddingRight: Constants.PADDING.SMALL,
     },
@@ -52,13 +51,6 @@ const createUserStyle = StyleSheet.create({
         backgroundColor: Constants.COLORS.WHITE,
         borderRadius: Constants.BORDERS.RADIUS_SMALL
     },
-    footer: {
-        // padding: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingTop: Constants.PADDING.SMALL,
-        paddingBottom: Constants.PADDING.MEDIUM
-    },
     datePicker: {
         backgroundColor: Constants.COLORS.BLUE,
         padding: Constants.PADDING.SMALL,
@@ -71,7 +63,22 @@ const createUserStyle = StyleSheet.create({
     },
     inputText:{
         padding: Constants.PADDING.LARGE
-    }
+    },
+    footer: {
+        padding: 20,
+        justifyContent: 'center',
+        paddingBottom: Constants.PADDING.LARGE,
+        paddingTop: Constants.PADDING.SMALL
+    },
+    signupBtn: {
+        backgroundColor: Constants.COLORS.RED,
+        color: Constants.COLORS.WHITE,
+        fontFamily: 'Montserrat-Bold',
+        fontSize: Constants.SIZE.REGULAR,
+        textAlign: 'center',
+        borderRadius: Constants.BORDERS.RADIUS_LARGE,
+        padding: Constants.PADDING.SMALL
+    },
 });
 
 export { createUserStyle };

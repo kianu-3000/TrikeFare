@@ -3,7 +3,7 @@ import { StyleSheet, View, TextInput } from "react-native";
 import { useFonts } from 'expo-font';
 import { fonts } from "../utils/fonts";
 
-const CustomInput = ({ fontFamily, color, isSecure, inputValue, placeholderValue, flexValue, keyboardTypeValue = 'default' }) => {
+const CustomInput = ({ fontFamily, color, isSecure, inputValue, value, placeholderValue, flexValue, keyboardTypeValue = 'default' }) => {
 
     const [fontsLoaded] = useFonts(fonts);
 
@@ -16,6 +16,7 @@ const CustomInput = ({ fontFamily, color, isSecure, inputValue, placeholderValue
             <TextInput
                 style={[style.messageText, { fontFamily: fontFamily, padding: Constants.PADDING.SMALL }]}
                 secureTextEntry={isSecure}
+                value={value}
                 onChangeText={inputValue}
                 placeholder={placeholderValue}
                 keyboardType={keyboardTypeValue} />
@@ -26,12 +27,11 @@ const CustomInput = ({ fontFamily, color, isSecure, inputValue, placeholderValue
 const style = StyleSheet.create({
     message: {
         marginBottom: Constants.MARGIN.SMALL,
-        borderRadius: Constants.BORDERS.RADIUS_SMALL,
-        padding: 3
+        borderRadius: Constants.BORDERS.RADIUS_LARGE,
     },
     messageText: {
         fontSize: Constants.SIZE.REGULAR,
-        textAlign: 'center',
+        // textAlign: 'center',
         color: Constants.COLORS.BLACK
     }
 })

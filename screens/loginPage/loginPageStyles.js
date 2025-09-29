@@ -76,7 +76,7 @@ const loginStyle = StyleSheet.create({
         padding: Constants.PADDING.SMALL
     },
     forgotPassword: {
-        fontSize: 10,
+        fontSize: 15,
         fontFamily: 'Montserrat',
         marginBottom: Constants.MARGIN.SMALL,
         color: Constants.COLORS.BLUE
@@ -91,12 +91,15 @@ const loginStyle = StyleSheet.create({
         justifyContent: 'center'
     },
     label3: {
-        fontSize: Constants.SIZE.SMALL,
+        fontSize: 15,
     },
     createAccountLabel: {
-        fontSize: Constants.SIZE.SMALL,
+        fontSize: 15,
         color: Constants.COLORS.BLUE
+    },
+    logoContainer: {
+        flexDirection: 'row',
     }
 })
 
-export {loginStyle}
+export { loginStyle }

@@ -46,7 +46,8 @@ const Constants = {
     },
 
     API_ROUTE: {
-        API_ENDPOINT: "http://10.0.2.2:8000/api",
+        API_ENDPOINT: "http://192.168.1.24:8000/api",
+        // API_ENDPOINT: "http://10.0.2.2:8000/api",
         API_MAPS: "https://api.openrouteservice.org/"
     },
     STATUS_CODE: {

@@ -57,12 +57,14 @@ export function MapSection({ navigation, backRoute, isSpecialPage }) {
     }, []);
 
     // book Submitting
-    const submitBook = () => {
+    const submitBook = (navigation) => {
         if (pinType == Constants.PIN_TYPE.PICK_UP) {
             setStartLoc({ lat: region.latitude, long: region.longitude, address: address })
+            navigation.navigate(backRoute);
             console.log('Pick Up' + JSON.stringify(region));
         } else if (pinType == Constants.PIN_TYPE.DROP_OFF) {
             setDestLoc({ lat: region.latitude, long: region.longitude, address: address })
+            navigation.navigate(backRoute);
             console.log('Drop Off' + JSON.stringify(region));
         }
     }
@@ -70,7 +72,6 @@ export function MapSection({ navigation, backRoute, isSpecialPage }) {
     // Component
     return (
         <View style={style.container}>
-
             {/* map section */}
             <View style={style.map}>
                 {
@@ -109,11 +110,11 @@ export function MapSection({ navigation, backRoute, isSpecialPage }) {
                         />
                     )}
 
-                    <UrlTile
+                    {/* <UrlTile
                         urlTemplate={`https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${Constants.API_KEY.MAP_TILER}`}
                         maximumZ={19}
                         flipY={false}
-                    />
+                    /> */}
 
                 </MapView>
                 <Ionicons name="pin" size={42} color={Constants.COLORS.RED} style={style.pin} />
@@ -132,7 +133,7 @@ export function MapSection({ navigation, backRoute, isSpecialPage }) {
                     <Ionicons name={'location-outline'} size={32} color={Constants.COLORS.RED} />
                     <View style={style.info_card_location}>
                         <CustomText style={{ fontFamily: 'Montserrat' }}>Pick up</CustomText>
-                        <CustomText style={style.location_text}>{address && pinType == Constants.PIN_TYPE.PICK_UP  ? address : 'Choose Location Pick Up'}</CustomText>
+                        <CustomText style={style.location_text}>{startLoc.address ? startLoc.address : 'Choose Location Pick Up'}</CustomText>
                     </View>
                 </View>
 
@@ -140,7 +141,7 @@ export function MapSection({ navigation, backRoute, isSpecialPage }) {
                     <Ionicons name={'location-outline'} size={32} color={Constants.COLORS.BLUE} />
                     <View style={style.info_card_location}>
                         <CustomText style={{ fontFamily: 'Montserrat' }}>Drop off</CustomText>
-                        <CustomText style={style.location_text}>{address && pinType == Constants.PIN_TYPE.DROP_OFF ? address : 'Choose Location Drop Off'}</CustomText>
+                        <CustomText style={style.location_text}>{destLoc.address ? destLoc.address : 'Choose Location Drop Off'}</CustomText>
                     </View>
                 </View>
             </View>
@@ -149,7 +150,7 @@ export function MapSection({ navigation, backRoute, isSpecialPage }) {
             <View style={style.navigation}>
                 <CustomButton color={Constants.COLORS.RED} fontSize={Constants.SIZE.REGULAR} onPress={() => navigation.navigate(backRoute)} text={'Back'} width={'auto'} />
                 {isSpecialPage ?
-                    <CustomButton color={Constants.COLORS.GREEN} fontSize={Constants.SIZE.REGULAR} onPress={() => { submitBook() }} text={pinType == Constants.PIN_TYPE.PICK_UP ? 'Pick Up' : 'Drop Off'} width={'auto'} />
+                    <CustomButton color={Constants.COLORS.GREEN} fontSize={Constants.SIZE.REGULAR} onPress={() => { submitBook(navigation) }} text={pinType == Constants.PIN_TYPE.PICK_UP ? 'Pick Up' : 'Drop Off'} width={'auto'} />
                     :
                     <CustomButton color={Constants.COLORS.RED} fontSize={Constants.SIZE.REGULAR} onPress={() => navigation.navigate('TaripaSection')} text={'Taripa'} width={'auto'} />}
 

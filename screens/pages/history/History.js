@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import { Constants } from '../../../constants/constants';
 import { globalStyle } from '../../../utils/styles';
 import CustomText from '../../../components/CustomText';
@@ -16,14 +16,19 @@ export default function History() {
     const [viewData, setViewData] = useState({});
     const [getHistoryData, setGetHistoryData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
+    const [nodata, setNoData] = useState('');
 
     const getHist = async () => {
         try {
             setIsLoading(true);
             const data = await getHistory();
+            if (data.users) {
+                setGetHistoryData(data.users);
+                data.users.length < 1 && setNoData("No data to display.")
+            }
             setIsLoading(false);
-            setGetHistoryData(data.users);
-            console.log("New data updateds:", getHistoryData);
+            console.log("New data updates:", getHistoryData);
         } catch (err) {
             console.log('Error getting data: ' + err)
         }
@@ -34,9 +39,20 @@ export default function History() {
 
     useEffect(() => {
         if (getHistoryData) {
-            console.log("New data updateds:", getHistoryData);
+            console.log("New data updates:", getHistoryData);
         }
     }, [getHistoryData]);
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        const data = await getHistory();
+        if (data.users) {
+            setGetHistoryData(data.users);
+            data.users.length < 1 && setNoData("No data to display.")
+        }
+        console.log("New data updates:", getHistoryData)
+        setRefreshing(false);
+    };
 
     const openModal = (trigger, data) => {
         setIsModal(trigger);
@@ -61,13 +77,19 @@ export default function History() {
             </View>
 
             {/* Main Content */}
-            <ScrollView style={style.main}>
+            <ScrollView style={style.main}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+            >
                 {
+                    getHistoryData?.length > 0 ?
                     getHistoryData.map((data, index) => {
                         return (
                             <CustomCard details={data} key={index} pressFunc={() => openModal(true, data)} />
                         )
                     })
+                    : <CustomText >{nodata}</CustomText>
                 }
             </ScrollView>
             {/* Modal Content */}

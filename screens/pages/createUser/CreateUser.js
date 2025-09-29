@@ -18,6 +18,7 @@ import CustomRadioButton from '../../../components/CustomRadioButton';
 import { createUser } from '../../../services/service';
 import CustomLoading from '../../../components/CustomLoading';
 import CustomMessageModal from '../../../components/CustomMessageModal';
+import { isEmail, isValidPassword } from '../../../assets/General/Utils';
 
 export default function CreateUserPage({ navigation }) {
 
@@ -32,18 +33,15 @@ export default function CreateUserPage({ navigation }) {
     const initialFormData = {
         name: '',
         lastName: '',
-        username: '',
         mobile: '',
         idNumber: '',
         password: '',
         reEnterPassword: '',
-        gender: '',
         email: ''
     };
     const [formData, setFormData] = useState({
         name: '',
         lastName: '',
-        username: '',
         mobile: '',
         idNumber: '',
         password: '',
@@ -61,35 +59,49 @@ export default function CreateUserPage({ navigation }) {
         const isEmpty = checkEmptyForms(formData);
         // check if there are empty fields
         if (isEmpty) {
-            setIsValid(false);
-            setTimeout(() => {
-                setIsValid(true);
-            }, 2000);
-        } else {
-            if (formData.password != formData.reEnterPassword) {
-                setPasswordCompare(false);
-                setTimeout(() => {
-                    setPasswordCompare(true);
-                }, 2000);
+            setModalVisible(true)
+            setResponseMsg('All fields are required.')
+            setResponseStatus(500)
+            return;
+        }
+        if (!isEmail(formData.email)) {
+            setModalVisible(true)
+            setResponseMsg('Email is invalid.')
+            setResponseStatus(500)
+            return;
+        }
+        else if (!isValidPassword(formData.password)) {
+            setModalVisible(true)
+            setResponseMsg(
+                'Password must be 8-24 characters long and include at least one uppercase letter and one number.'
+            );
+            setResponseStatus(500)
+            return;
+        }
+        else if (formData.password !== formData.reEnterPassword) {
+            setModalVisible(true)
+            setResponseMsg('Password does not match.')
+            setResponseStatus(500)
+            return;
+        }
+        else {
+            setIsLoading(true);
+            const dataRaw = await createUser(formData);
+            setIsLoading(false);
+            console.log(JSON.stringify(dataRaw));
+            if (dataRaw.status == Constants.STATUS_CODE.INTERNAL_SERVER) {
+                setModalVisible(true);
+                setResponseStatus(dataRaw.status);
+                setResponseMsg(dataRaw.message);
+            } else if (dataRaw.status == Constants.STATUS_CODE.OK) {
+                setFormData(initialFormData);
+                setModalVisible(true);
+                setResponseStatus(dataRaw.status);
+                setResponseMsg(dataRaw.message);
             } else {
-                setIsLoading(true);
-                const dataRaw = await createUser(formData);
-                setIsLoading(false);
-                console.log(JSON.stringify(dataRaw));
-                if (dataRaw.status == Constants.STATUS_CODE.INTERNAL_SERVER) {
-                    setModalVisible(true);
-                    setResponseStatus(dataRaw.status);
-                    setResponseMsg(dataRaw.message);
-                } else if (dataRaw.status == Constants.STATUS_CODE.OK) {
-                    setFormData(initialFormData);
-                    setModalVisible(true);
-                    setResponseStatus(dataRaw.status);
-                    setResponseMsg(dataRaw.message);
-                } else {
-                    setModalVisible(true);
-                    setResponseStatus(dataRaw.status);
-                    setResponseMsg(dataRaw.message);
-                }
+                setModalVisible(true);
+                setResponseStatus(dataRaw.status);
+                setResponseMsg(dataRaw.message);
             }
         }
 
@@ -118,7 +130,8 @@ export default function CreateUserPage({ navigation }) {
                         </TouchableOpacity>
                     </View>
                     <View style={createUserStyle.headerTitle}>
-                        <CustomText style={createUserStyle.headerTitleText}>CREATE YOUR ACCOUNT</CustomText>
+                        <CustomText style={createUserStyle.headerTitleText}>CREATE YOUR</CustomText>
+                        <CustomText style={createUserStyle.headerTitleText}>ACCOUNT</CustomText>
                     </View>
                 </View>
 
@@ -129,79 +142,84 @@ export default function CreateUserPage({ navigation }) {
                         {
                             !isValid ? <CustomMessage fontFamily={''} color={Constants.COLORS.YELLOW} message={'Please don\'t leave empty inputs!'} /> : null
                         }
+                        {/* ID Number section */}
+                        <View>
+                            <CustomInput
+                                fontFamily={'Montserrat'}
+                                color={Constants.COLORS.WHITE}
+                                isSecure={false}
+                                value={formData.email}
+                                inputValue={(text) =>
+                                    setFormData((prev) => ({ ...prev, email: text }))}
+                                placeholderValue={'Email'}
+                                flexValue={0}
+                                keyboardTypeValue='numeric'
+                                style={[createUserStyle.inputText]} />
+                        </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-around', gap: Constants.SIZE.REGULAR }}>
                             {/* First Name */}
                             <View style={{ flex: 1 }}>
                                 <CustomInput
-                                    fontFamily={'Montserrat-Bold'}
+                                    fontFamily={'Montserrat'}
                                     color={Constants.COLORS.WHITE}
                                     isSecure={false}
+                                    value={formData.name}
                                     inputValue={(text) =>
                                         setFormData((prev) => ({ ...prev, name: text }))}
-                                    placeholderValue={'Enter Name'}
+                                    placeholderValue={'First Name'}
                                     flexValue={0}
                                     style={[createUserStyle.inputText]} />
                             </View>
                             {/* Last Name */}
                             <View style={{ flex: 1 }}>
                                 <CustomInput
-                                    fontFamily={'Montserrat-Bold'}
+                                    fontFamily={'Montserrat'}
                                     color={Constants.COLORS.WHITE}
                                     isSecure={false}
+                                    value={formData.lastName}
                                     inputValue={(text) =>
                                         setFormData((prev) => ({ ...prev, lastName: text }))}
-                                    placeholderValue={'Enter Last Name'}
+                                    placeholderValue={'Last Name'}
                                     flexValue={0}
                                     style={[createUserStyle.inputText]} />
                             </View>
                         </View>
-                        {/* Username section */}
-                        <View>
-                            <CustomInput
-                                fontFamily={'Montserrat-Bold'}
-                                color={Constants.COLORS.WHITE}
-                                isSecure={false}
-                                inputValue={(text) =>
-                                    setFormData((prev) => ({ ...prev, username: text }))}
-                                placeholderValue={'Enter username'}
-                                flexValue={0}
-                                style={[createUserStyle.inputText]} />
-                        </View>
                         {/* Mobile Number section */}
                         <View>
                             <CustomInput
-                                fontFamily={'Montserrat-Bold'}
+                                fontFamily={'Montserrat'}
                                 color={Constants.COLORS.WHITE}
                                 isSecure={false}
+                                value={formData.mobile}
                                 inputValue={(text) =>
                                     setFormData((prev) => ({ ...prev, mobile: text }))}
-                                placeholderValue={'Enter Mobile Number'}
+                                placeholderValue={'Mobile Number'}
                                 flexValue={0}
                                 keyboardTypeValue='numeric'
                                 style={[createUserStyle.inputText]} />
                         </View>
+
+                        {/* Gender */}
+                        <View style={{
+                            padding: Constants.PADDING.SMALL,
+                            borderRadius: Constants.BORDERS.RADIUS_SMALL
+                        }}>
+                            <View style={{
+                                flexDirection: 'row',
+                            }}>
+                                <CustomRadioButton setGender={setSelectedGender} />
+                            </View>
+                        </View>
                         {/* ID Number section */}
                         <View>
                             <CustomInput
-                                fontFamily={'Montserrat-Bold'}
+                                fontFamily={'Montserrat'}
                                 color={Constants.COLORS.WHITE}
                                 isSecure={false}
+                                value={formData.idNumber}
                                 inputValue={(text) =>
                                     setFormData((prev) => ({ ...prev, idNumber: text }))}
-                                placeholderValue={'Enter ID Number'}
-                                flexValue={0}
-                                keyboardTypeValue='numeric'
-                                style={[createUserStyle.inputText]} />
-                        </View>
-                        {/* ID Number section */}
-                        <View>
-                            <CustomInput
-                                fontFamily={'Montserrat-Bold'}
-                                color={Constants.COLORS.WHITE}
-                                isSecure={false}
-                                inputValue={(text) =>
-                                    setFormData((prev) => ({ ...prev, email: text }))}
-                                placeholderValue={'Enter Email'}
+                                placeholderValue={'ID Number'}
                                 flexValue={0}
                                 keyboardTypeValue='numeric'
                                 style={[createUserStyle.inputText]} />
@@ -212,20 +230,22 @@ export default function CreateUserPage({ navigation }) {
                         }
                         <View>
                             <CustomInput
-                                fontFamily={'Montserrat-Bold'}
+                                fontFamily={'Montserrat'}
                                 color={Constants.COLORS.WHITE}
                                 isSecure={true}
+                                value={formData.password}
                                 inputValue={(text) =>
                                     setFormData((prev) => ({ ...prev, password: text }))}
-                                placeholderValue={'Enter Password'}
+                                placeholderValue={'Password'}
                                 flexValue={0}
                                 style={[createUserStyle.inputText]} />
                         </View>
                         <View>
                             <CustomInput
-                                fontFamily={'Montserrat-Bold'}
+                                fontFamily={'Montserrat'}
                                 color={Constants.COLORS.WHITE}
                                 isSecure={true}
+                                value={formData.reEnterPassword}
                                 inputValue={(text) =>
                                     setFormData((prev) => ({ ...prev, reEnterPassword: text }))}
                                 placeholderValue={'Re-enter Password'}
@@ -233,28 +253,14 @@ export default function CreateUserPage({ navigation }) {
                                 style={[createUserStyle.inputText]} />
                         </View>
 
-                        {/* Gender */}
-                        <View style={{
-                            padding: Constants.PADDING.SMALL,
-                            backgroundColor: Constants.COLORS.WHITE,
-                            borderRadius: Constants.BORDERS.RADIUS_SMALL
-                        }}>
-                            <CustomText style={[{ fontFamily: 'Montserrat-Bold', textAlign: 'center' }]}>Gender</CustomText>
-                            <View style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                paddingLeft: Constants.PADDING.MEDIUM,
-                                paddingRight: Constants.PADDING.MEDIUM
-                            }}>
-                                <CustomRadioButton setGender={setSelectedGender} />
-                            </View>
-                        </View>
                     </View>
                 </ScrollView>
 
                 {/* Footer */}
                 <View style={createUserStyle.footer}>
-                    <CustomButton color={Constants.COLORS.RED} fontSize={Constants.SIZE.X_MEDIUM} onPress={() => { submit() }} text={'Submit'} />
+                    <TouchableOpacity onPress={submit}>
+                        <Text style={createUserStyle.signupBtn}>Signup</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </KeyboardAvoidingView>

@@ -1,14 +1,24 @@
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useState } from 'react';
 
 import { Constants } from '../../../constants/constants';
 import { globalStyle } from '../../../utils/styles';
 import CustomText from '../../../components/CustomText';
-import { useState } from 'react';
-
-
+import { createAppRating } from '../../../services/service';
+import CustomMessageModal from '../../../components/CustomMessageModal';
+import CustomLoading from '../../../components/CustomLoading';
 
 export default function Rating() {
+    const [experience, setExperience] = useState('');
+    const [suggestion, setSuggestion] = useState('');
+    const [rating, setRating] = useState(0);
+
+    const [loading, setLoading] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [responseMsg, setResponseMsg] = useState('');
+    const [responseStatus, setResponseStatus] = useState('');
+
     const [star, setStar] = useState([
         { color: Constants.COLORS.WHITE },
         { color: Constants.COLORS.WHITE },
@@ -16,16 +26,66 @@ export default function Rating() {
         { color: Constants.COLORS.WHITE },
         { color: Constants.COLORS.WHITE }
     ]);
-    const starColor = (arrLen) => {
-        for (let x = 0; x < arrLen; x++) {
-            star[arrLen].color = Constants.COLORS.YELLOW
-            console.log("Color: " + star[arrLen].color);
+
+    const starColor = (index) => {
+        const updatedStars = star.map((s, i) => ({
+            color: i <= index ? Constants.COLORS.YELLOW : Constants.COLORS.WHITE
+        }));
+        setStar(updatedStars);
+        setRating(index + 1); // rating is 1-based
+    };
+
+    const handleSubmit = async () => {
+        if (!rating) {
+            setModalVisible(true)
+            setResponseMsg('Rating is required.')
+            setResponseStatus(500)
+            return;
         }
-        console.log("Len: " + arrLen)
-    }
+        if (!experience) {
+            setModalVisible(true)
+            setResponseMsg('Experience field is required.')
+            setResponseStatus(500)
+            return;
+        }
+        setLoading(true);
+        try {
+
+            const response = await createAppRating(experience, rating, suggestion);
+
+            if (response?.status === 200) {
+                setModalVisible(true)
+                setResponseMsg(response.message)
+                setResponseStatus(response.status)
+                setExperience('');
+                setSuggestion('');
+                setRating(0);
+                setStar(star.map(() => ({ color: Constants.COLORS.WHITE })));
+                setLoading(false);
+            } else {
+                setModalVisible(true)
+                setResponseMsg('Something went wrong.')
+                setResponseStatus(500)
+            }
+        }
+        catch {
+            setLoading(false);
+            setModalVisible(true)
+            setResponseMsg('Something went wrong.')
+            setResponseStatus(500)
+        }
+    };
 
     return (
         <View style={[{ backgroundColor: Constants.COLORS.GRAYISH_WHITE }, globalStyle.container]}>
+            {loading && <CustomLoading />}
+
+            <CustomMessageModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                message={responseMsg}
+                response={responseStatus}
+            />
             {/* Header */}
             <View style={globalStyle.headerContainer}>
                 <CustomText style={globalStyle.textTitle}>Rate Us</CustomText>
@@ -39,21 +99,17 @@ export default function Rating() {
                             Rate us to improve this app!
                         </CustomText>
                         <View style={[style.card_star]}>
-
-                            {
-                                star.map((icon, index) => {
-                                    return (
-                                        <TouchableOpacity key={index} onPress={() => { starColor(index) }}>
-                                            <Ionicons name={'star'} size={20} color={icon.color} style={[style.icon]} />
-                                        </TouchableOpacity>
-                                    )
-                                })
-                            }
+                            {star.map((icon, index) => (
+                                <TouchableOpacity key={index} onPress={() => starColor(index)}>
+                                    <Ionicons name={'star'} size={25} color={icon.color} style={[style.icon]} />
+                                </TouchableOpacity>
+                            ))}
                         </View>
                     </View>
+
                     <View style={[style.main_card]}>
                         <CustomText style={[style.text]}>
-                            How’s your experience to use this app??
+                            How’s your experience using this app?
                         </CustomText>
                     </View>
                 </View>
@@ -61,37 +117,55 @@ export default function Rating() {
                 <View style={[style.textAreaContainer]}>
                     <TextInput
                         placeholder="Enter your message..."
-                        multiline={true}          // ✅ Allows multiple lines
-                        numberOfLines={4}         // ✅ Sets initial height
+                        multiline={true}
+                        numberOfLines={4}
                         style={style.textArea}
+                        value={experience}
+                        onChangeText={(text) => {
+                            if (text.length <= 200) {
+                                setExperience(text);
+                            }
+                        }}
                     />
+                    <CustomText style={style.charCount}>
+                        {experience.length}/200
+                    </CustomText>
                 </View>
+
                 <View style={[style.main_card]}>
                     <CustomText style={[style.text]}>
-                        What is your suggestion to improve more this app?
+                        What is your suggestion to improve this app?
                     </CustomText>
                 </View>
                 <View style={[style.textAreaContainer]}>
                     <TextInput
-                        placeholder="Enter your message..."
-                        multiline={true}          // ✅ Allows multiple lines
-                        numberOfLines={4}         // ✅ Sets initial height
+                        placeholder="Enter your suggestion..."
+                        multiline={true}
+                        numberOfLines={4}
                         style={style.textArea}
+                        value={suggestion}
+                        onChangeText={(text) => {
+                            if (text.length <= 200) {
+                                setSuggestion(text);
+                            }
+                        }}
                     />
+                    <CustomText style={style.charCount}>
+                        {suggestion.length}/200
+                    </CustomText>
                 </View>
             </View>
 
-
             {/* Footer Content */}
             <View style={[style.footer_container]}>
-                <TouchableOpacity style={[style.button]}>
+                <TouchableOpacity style={[style.button]} onPress={handleSubmit}>
                     <CustomText style={[style.text]}>
                         Submit
                     </CustomText>
                 </TouchableOpacity>
             </View>
         </View>
-    )
+    );
 }
 
 const style = StyleSheet.create({
@@ -124,7 +198,7 @@ const style = StyleSheet.create({
         backgroundColor: Constants.COLORS.RED,
         padding: Constants.PADDING.REGULAR,
         borderRadius: Constants.BORDERS.RADIUS_NORMAL,
-        marginTop: Constants.MARGIN.SMALL
+        marginTop: Constants.MARGIN.REGULAR
     },
     card_star: {
         flexDirection: 'row',
@@ -140,9 +214,17 @@ const style = StyleSheet.create({
         fontFamily: 'Montserrat'
     },
     textAreaContainer: {
-        flex: 1, marginTop: Constants.MARGIN.SMALL,
+        flex: 1,
+        marginTop: Constants.MARGIN.SMALL,
         backgroundColor: Constants.COLORS.WHITE,
         padding: Constants.PADDING.SMALL,
         borderRadius: Constants.BORDERS.RADIUS_SMALL
-    }
-})
+    },
+    charCount: {
+        textAlign: 'right',
+        color: Constants.COLORS.GRAY,
+        marginTop: 15,
+        marginRight: 5,
+        fontSize: 12,
+    },
+});

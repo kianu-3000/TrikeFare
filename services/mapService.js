@@ -45,6 +45,49 @@ const getRoute = async (setRouteCoords) => {
     }
 };
 
+const getRoute2 = async (setRouteCoords, startLoc, endLoc) => {
+    const start = [startLoc.long, startLoc.lat]; // [lng, lat] - e.g., Manila
+    const end = [endLoc.long, endLoc.lat];   // [lng, lat] - e.g., Quezon City
+
+
+    const url = 'https://api.openrouteservice.org/v2/directions/driving-car';
+
+    const body = {
+        coordinates: [start, end],
+    };
+
+    try {
+
+        const response = await axios.post(
+            'https://api.openrouteservice.org/v2/directions/driving-car/geojson',
+            {
+                coordinates: [
+                    start, // lng, lat
+                    end,
+                ],
+            },
+            {
+                headers: {
+                    Authorization: Constants.API_KEY.OPEN_ROUTE_SERVICE,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+
+        const data = await response.data.features[0].geometry.coordinates;
+        // console.log(JSON.stringify(data));
+
+        const formattedCoords = data.map(([lng, lat]) => ({
+            latitude: lat,
+            longitude: lng,
+        }));
+        setRouteCoords(formattedCoords);
+
+    } catch (error) {
+        console.error('ORS route error:', error);
+    }
+};
+
 const getAddressFromCoords = async (lat, lng, setAddress, setIsLoading) => {
     try {
         setIsLoading(true);
@@ -102,4 +145,4 @@ const goToMyLocation = async (mapRef, setRegion, setPin) => {
     
 };
 
-export { getRoute, getAddressFromCoords, goToMyLocation };
+export { getRoute, getAddressFromCoords, goToMyLocation, getRoute2 };
