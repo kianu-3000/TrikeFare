@@ -107,7 +107,7 @@ const getAddressFromCoords = async (lat, lng, setAddress, setIsLoading) => {
         if (features.length > 0) {
             const address = features[0].properties.label;
             setAddress(address);
-            // console.log("Address:", address);
+            // console.log("response:", JSON.stringify(response));
             return address;
         } else {
             console.warn("No address found");
@@ -118,6 +118,27 @@ const getAddressFromCoords = async (lat, lng, setAddress, setIsLoading) => {
         return null;
     }
 };
+
+const getDistanceFromCoords = async (start, end) => {
+    try{
+        const response = await axios.get('https://api.openrouteservice.org/v2/directions/driving-car', {
+            params: {
+                api_key: Constants.API_KEY.OPEN_ROUTE_SERVICE,
+                start: start, // notice it's lng,lat,
+                end: end
+            }
+        });
+        if(response){
+            return response;
+        }else{
+            console.warn("No Distance found");
+            return null;
+        }
+    }catch(error){
+        console.error("Error Getting Distance:", error.message);
+        return null;
+    }
+}
 
 const goToMyLocation = async (mapRef, setRegion, setPin) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -145,4 +166,4 @@ const goToMyLocation = async (mapRef, setRegion, setPin) => {
     
 };
 
-export { getRoute, getAddressFromCoords, goToMyLocation, getRoute2 };
+export { getRoute, getAddressFromCoords, goToMyLocation, getRoute2, getDistanceFromCoords };

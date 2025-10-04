@@ -16,7 +16,7 @@ import CustomLoading from '../../../components/CustomLoading.js';
 import { useDestination } from '../../../context/AuthContext.js';
 
 
-export default function MapStartSession({ navigation, startLoc, destLoc, driverName }) {
+export default function MapStartSession({ navigation, startLoc, destLoc, driverName, distance, price, onPress }) {
     const [routeCoords, setRouteCoords] = useState([]);
     const [message, setMessage] = useState(true);
     const [pinStart, setPinStart] = useState(null);
@@ -95,14 +95,21 @@ export default function MapStartSession({ navigation, startLoc, destLoc, driverN
                 <CustomText style={[style.pinText, { color: Constants.COLORS.GREEN }]}>Driver:
                     <CustomText style={{ color: Constants.COLORS.BLACK }}> {driverName} </CustomText>
                 </CustomText>
-                <CustomText style={[style.pinText, { color: Constants.COLORS.RED }]}>Current Location:
+                <CustomText style={[style.pinText, { color: Constants.COLORS.RED }]}>From:
                     <CustomText style={{ color: Constants.COLORS.BLACK }}> {startLoc.address} </CustomText>
                 </CustomText>
-                <CustomText style={[style.pinText2, { color: Constants.COLORS.BLUE }]}>Destination Location:
+                <CustomText style={[style.pinText2, { color: Constants.COLORS.BLUE }]}>To:
                     <CustomText style={{ color: Constants.COLORS.BLACK }}> {destLoc.address} </CustomText>
                 </CustomText>
+
+                <CustomText style={[style.pinText2, { color: Constants.COLORS.YELLOW }]}>Distance:
+                    <CustomText style={{ color: Constants.COLORS.BLACK }}> {distance} km </CustomText>
+                </CustomText>
+                <CustomText style={[style.pinText2, { color: Constants.COLORS.BLACK }]}>Price:
+                    <CustomText style={{ color: Constants.COLORS.BLACK }}> Php {price} </CustomText>
+                </CustomText>
                 
-                <TouchableOpacity style={style.cancelBtn}>
+                <TouchableOpacity style={style.cancelBtn} onPress={onPress}>
                     <CustomText style={style.cancelBtnText}> Cancel </CustomText>
                 </TouchableOpacity>
             </View>
@@ -130,11 +137,16 @@ const style = StyleSheet.create({
         flex: 1
     },
     pinText: {
-        marginBottom: Constants.MARGIN.SMALL,
         fontFamily: 'Montserrat-Bold',
+        padding: Constants.PADDING.SMALL,
+        borderWidth: 1,
+        borderColor: Constants.COLORS.RED
     },
     pinText2: {
         fontFamily: 'Montserrat-Bold',
+        padding: Constants.PADDING.SMALL,
+        borderWidth: 1,
+        borderColor: Constants.COLORS.RED
     },
     cancelBtn: {
         backgroundColor: Constants.COLORS.RED,

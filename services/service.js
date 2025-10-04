@@ -227,5 +227,24 @@ export const acceptBooking = async (bookId, driverId) => {
     
 };
 
+export const getBaseFare = async () => {
+    try {
+        const token = await AsyncStorage.getItem('token'); 
+        const res = await fetch(apiRoutes.getBaseFare, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        return await res.json();
+
+    } catch (err) {
+        console.log('Error encountered:', err);
+    }
+    
+};
+
 
 

@@ -15,4 +15,15 @@ const formatDate = (date) => {
     return `${year}-${month}-${day}`;
 };
 
-export { checkEmptyForms, formatDate };
+const distancePrice = (tempDist, baseFare, fareRate) => {
+    let tempPrice;
+    if (parseFloat(tempDist) > 3) {
+        tempPrice = baseFare + ((parseFloat(tempDist).toFixed(2) - 2) * parseFloat(fareRate).toFixed(2));
+        return tempPrice.toFixed(2);
+    }else{
+        return baseFare;
+    }
+    
+}
+
+export { checkEmptyForms, formatDate, distancePrice };

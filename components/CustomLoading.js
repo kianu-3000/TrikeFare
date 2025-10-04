@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         backgroundColor: Constants.COLORS.RED_TINT,
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 9999,
+        zIndex: 1000000,
     },
     circle: {
         position: 'absolute',

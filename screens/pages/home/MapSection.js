@@ -30,7 +30,7 @@ export function MapSection({ navigation, backRoute, isSpecialPage }) {
     })
     const [routeCoords, setRouteCoords] = useState([]);
     const [pin, setPin] = useState(null);
-    const { startLoc, setStartLoc, destLoc, setDestLoc, pinType } = useDestination();
+    const { startLoc, setStartLoc, destLoc, setDestLoc, pinType, baseFare } = useDestination();
 
     useEffect(() => { // this will initialize the map
         console.log('PinType: ' + pinType);
@@ -60,10 +60,12 @@ export function MapSection({ navigation, backRoute, isSpecialPage }) {
     const submitBook = (navigation) => {
         if (pinType == Constants.PIN_TYPE.PICK_UP) {
             setStartLoc({ lat: region.latitude, long: region.longitude, address: address })
+            // console.log("Base Fare: ", JSON.stringify(baseFare));
             navigation.navigate(backRoute);
             console.log('Pick Up' + JSON.stringify(region));
         } else if (pinType == Constants.PIN_TYPE.DROP_OFF) {
-            setDestLoc({ lat: region.latitude, long: region.longitude, address: address })
+            setDestLoc({ lat: region.latitude, long: region.longitude, address: address });
+            // console.log("Base Fare: ", JSON.stringify(baseFare));
             navigation.navigate(backRoute);
             console.log('Drop Off' + JSON.stringify(region));
         }
@@ -123,7 +125,7 @@ export function MapSection({ navigation, backRoute, isSpecialPage }) {
             {/* payment section */}
             <View style={style.payment_container}>
                 <View style={style.payment}>
-                    <CustomText style={style.payment_text}>Php 13.00</CustomText>
+                    <CustomText style={style.payment_text}>Php {baseFare}</CustomText>
                 </View>
             </View>
 

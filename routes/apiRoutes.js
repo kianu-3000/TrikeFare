@@ -13,7 +13,8 @@ const apiRoutes = {
     createRating: mainRoute.concat("/commuter/createRating"),
     createBooking: mainRoute.concat("/commuter/createBooking"),
     cancelBooking: mainRoute.concat("/commuter/cancelBooking"),
-    acceptBooking: mainRoute.concat("/commuter/acceptBooking")
+    acceptBooking: mainRoute.concat("/commuter/acceptBooking"),
+    getBaseFare: mainRoute.concat("/commuter/getBaseFare")
 }
 
 export { apiRoutes };
