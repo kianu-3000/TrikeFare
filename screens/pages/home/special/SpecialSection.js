@@ -27,6 +27,7 @@ export default function SpecialSectionPage({ navigation }) {
     const [startMapSession, setStartMapSession] = useState(false);
     const [waitingDriver, setWaitingDriver] = useState(false);
     const [bookId, setBookId] = useState(null);
+    const [isDriverStarted, setIsDriverStarted] = useState(true);
     const { startLoc, setStartLoc, destLoc, setDestLoc, pinType, setPinType, setDistanceInKm, distanceInKm, baseFare, fareRate } = useDestination();
     const [farePrice, setFarePrice] = useState(baseFare);
 
@@ -95,6 +96,25 @@ export default function SpecialSectionPage({ navigation }) {
             socketRef.current.on('booking_canceled', (data) => {
                 console.log('booking_canceled', data);
             });
+
+            socketRef.current.on('driver_cancelled', (data) => {
+                setStartMapSession(false);
+                setWaitingDriver(true);
+                console.log('driver_cancelled', data);
+            });
+
+            socketRef.current.on('driver_finished', (data) => {
+                setStartMapSession(true);
+                setWaitingDriver(false);
+                setIsDriverStarted(false);
+                console.log('driver_finished', data);
+            });
+            socketRef.current.on('driver_completed', (data) => {
+                setStartMapSession(false);
+                setWaitingDriver(false);
+                setIsDriverStarted(false);
+                console.log('driver_completed', data);
+            });
         };
 
         setupSocket();
@@ -105,6 +125,9 @@ export default function SpecialSectionPage({ navigation }) {
                 socketRef.current.off('booking_waiting');
                 socketRef.current.off('booking_accepted');
                 socketRef.current.off('booking_canceled');
+                socketRef.current.off('driver_finished');
+                socketRef.current.off('driver_cancelled');
+                socketRef.current.off('driver_completed');
                 socketRef.current.disconnect();
             }
         };
@@ -123,10 +146,10 @@ export default function SpecialSectionPage({ navigation }) {
 
         <View style={{ flex: 1, position: 'relative' }}>
             {
-                startMapSession ? <MapStartSession startLoc={startLoc} destLoc={destLoc} driverName={driverName} distance={distanceInKm} price={farePrice} onPress={cancelBook} /> : null
+                startMapSession ? <MapStartSession startLoc={startLoc} destLoc={destLoc} driverName={driverName} distance={distanceInKm} price={farePrice} onPress={cancelBook} isDriverStarted={isDriverStarted} /> : null
             }
             {
-                waitingDriver ? <WaitBooking onPress={cancelBook} /> : null
+                waitingDriver ? <WaitBooking onPress={cancelBook} farePrice={farePrice} /> : null
             }
             {
                 isLoading ? <CustomLoading /> : null
@@ -165,8 +188,8 @@ export default function SpecialSectionPage({ navigation }) {
 
             <View style={[style.card, style.cardPrice]}>
                 <View style={style.card_left}>
-                    <CustomText>Fare Price:</CustomText>
-                    <CustomText style={style.card_left_text}>{farePrice ? farePrice : null}</CustomText>
+                    <CustomText>Starting Price At:</CustomText>
+                    <CustomText style={[style.card_left_text, {textAlign: 'center'}]}>Php {baseFare ? baseFare : null}</CustomText>
                 </View>
             </View>
 
@@ -195,6 +218,13 @@ const style = StyleSheet.create({
         marginLeft: Constants.MARGIN.REGULAR,
         marginRight: Constants.MARGIN.REGULAR,
         marginTop: Constants.MARGIN.REGULAR
+    },
+    cardPrice:{
+        elevation: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: Constants.PADDING.SMALL,
+        backgroundColor: Constants.COLORS.YELLOW
     },
     submitButton: {
         backgroundColor: Constants.COLORS.GREEN,

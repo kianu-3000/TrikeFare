@@ -96,13 +96,13 @@ export default function LoginPage({ navigation }) {
 
                         <View style={loginStyle.inputContainer}>
                             <Ionicons name={'person'} size={20} color={Constants.COLORS.BLACK} style={loginStyle.icon} />
-                            <TextInput style={loginStyle.formInput} placeholder='Enter Username' onChangeText={setUserName} />
+                            <TextInput style={loginStyle.formInput} placeholder='Enter Username' onChangeText={setUserName} placeholderTextColor={Constants.COLORS.BLACK}  />
                         </View>
 
 
                         <View style={loginStyle.inputContainer}>
                             <Ionicons name={'lock-closed'} size={20} color={Constants.COLORS.BLACK} style={loginStyle.icon} />
-                            <TextInput style={loginStyle.formInput} placeholder='Enter Password' secureTextEntry={true} onChangeText={setPassword} />
+                            <TextInput style={loginStyle.formInput} placeholder='Enter Password' secureTextEntry={true} onChangeText={setPassword} placeholderTextColor={Constants.COLORS.BLACK}  />
                         </View>
 
                         <View style={loginStyle.misc}>

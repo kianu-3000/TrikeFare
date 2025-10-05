@@ -19,7 +19,8 @@ const CustomInput = ({ fontFamily, color, isSecure, inputValue, value, placehold
                 value={value}
                 onChangeText={inputValue}
                 placeholder={placeholderValue}
-                keyboardType={keyboardTypeValue} />
+                keyboardType={keyboardTypeValue}
+                placeholderTextColor={Constants.COLORS.BLACK}  />
         </View>
     )
 }

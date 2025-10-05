@@ -79,7 +79,7 @@ export function MapSection({ navigation, backRoute, isSpecialPage }) {
                 {
                     isLoading ? <CustomLoading /> : null
                 }
-                <MapView style={style.map_content} initialRegion={initialLocation}
+                <MapView style={style.map_content} initialRegion={initialLocation} provider={PROVIDER_GOOGLE}
                     onPress={(event) => {
                         const { latitude, longitude } = event.nativeEvent.coordinate;
                         console.log("Lat:", latitude, "Lng:", longitude); // this is what you want

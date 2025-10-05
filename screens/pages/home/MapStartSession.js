@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Constants } from '../../../constants/constants.js';
@@ -16,7 +16,7 @@ import CustomLoading from '../../../components/CustomLoading.js';
 import { useDestination } from '../../../context/AuthContext.js';
 
 
-export default function MapStartSession({ navigation, startLoc, destLoc, driverName, distance, price, onPress }) {
+export default function MapStartSession({ navigation, startLoc, destLoc, driverName, distance, price, onPress, isDriverStarted }) {
     const [routeCoords, setRouteCoords] = useState([]);
     const [message, setMessage] = useState(true);
     const [pinStart, setPinStart] = useState(null);
@@ -55,7 +55,7 @@ export default function MapStartSession({ navigation, startLoc, destLoc, driverN
             {
                 message ? <View style={style.message}><CustomText style={style.messageText}>Accepted By: {driverName}</CustomText></View> : null
             }
-            <MapView style={style.map_content} initialRegion={initialLocation} showsUserLocation={true}>
+            <MapView style={style.map_content} initialRegion={initialLocation} showsUserLocation={true} provider={PROVIDER_GOOGLE}>
                 {
                     routeCoords.length > 0 ?
                         <Polyline
@@ -91,28 +91,35 @@ export default function MapStartSession({ navigation, startLoc, destLoc, driverN
                         null
                 }
             </MapView>
-            <View style={style.description}>
-                <CustomText style={[style.pinText, { color: Constants.COLORS.GREEN }]}>Driver:
-                    <CustomText style={{ color: Constants.COLORS.BLACK }}> {driverName} </CustomText>
-                </CustomText>
-                <CustomText style={[style.pinText, { color: Constants.COLORS.RED }]}>From:
-                    <CustomText style={{ color: Constants.COLORS.BLACK }}> {startLoc.address} </CustomText>
-                </CustomText>
-                <CustomText style={[style.pinText2, { color: Constants.COLORS.BLUE }]}>To:
-                    <CustomText style={{ color: Constants.COLORS.BLACK }}> {destLoc.address} </CustomText>
-                </CustomText>
+            
+                <ScrollView style={style.description}>
+                    <CustomText style={[style.pinText, { color: Constants.COLORS.GREEN }]}>Driver:
+                        <CustomText style={{ color: Constants.COLORS.BLACK }}> {driverName} </CustomText>
+                    </CustomText>
+                    <CustomText style={[style.pinText, { color: Constants.COLORS.RED }]}>From:
+                        <CustomText style={{ color: Constants.COLORS.BLACK }}> {startLoc.address} </CustomText>
+                    </CustomText>
+                    <CustomText style={[style.pinText2, { color: Constants.COLORS.BLUE }]}>To:
+                        <CustomText style={{ color: Constants.COLORS.BLACK }}> {destLoc.address} </CustomText>
+                    </CustomText>
 
-                <CustomText style={[style.pinText2, { color: Constants.COLORS.YELLOW }]}>Distance:
-                    <CustomText style={{ color: Constants.COLORS.BLACK }}> {distance} km </CustomText>
-                </CustomText>
-                <CustomText style={[style.pinText2, { color: Constants.COLORS.BLACK }]}>Price:
-                    <CustomText style={{ color: Constants.COLORS.BLACK }}> Php {price} </CustomText>
-                </CustomText>
-                
-                <TouchableOpacity style={style.cancelBtn} onPress={onPress}>
-                    <CustomText style={style.cancelBtnText}> Cancel </CustomText>
-                </TouchableOpacity>
-            </View>
+                    <CustomText style={[style.pinText2, { color: Constants.COLORS.YELLOW }]}>Distance:
+                        <CustomText style={{ color: Constants.COLORS.BLACK }}> {distance} km </CustomText>
+                    </CustomText>
+                    <CustomText style={[style.pinText2, { color: Constants.COLORS.BLACK }]}>Price:
+                        <CustomText style={{ color: Constants.COLORS.BLACK }}> Php {price} </CustomText>
+                    </CustomText>
+                    {
+                        isDriverStarted ? (
+                            <TouchableOpacity style={style.cancelBtn} onPress={onPress}>
+                                <CustomText style={style.cancelBtnText}> Cancel </CustomText>
+                            </TouchableOpacity>
+                        )
+                            :
+                            null
+                    }
+
+                </ScrollView>
         </View>
     )
 }
@@ -130,11 +137,13 @@ const style = StyleSheet.create({
     description: {
         flex: 0,
         padding: Constants.PADDING.REGULAR,
+        paddingBottom: Constants.PADDING.LARGE,
         backgroundColor: Constants.COLORS.WHITE,
         elevation: 20
     },
     map_content: {
-        flex: 1
+        // flex: 1,
+        height: 300
     },
     pinText: {
         fontFamily: 'Montserrat-Bold',
@@ -153,7 +162,8 @@ const style = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: Constants.BORDERS.RADIUS_NORMAL,
-        marginTop: Constants.MARGIN.REGULAR
+        marginTop: Constants.MARGIN.REGULAR,
+        marginBottom: Constants.MARGIN.LARGE
     },
     cancelBtnText: {
         fontFamily: 'Montserrat-Bold',

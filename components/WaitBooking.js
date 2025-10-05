@@ -3,7 +3,7 @@ import { View, Image, Animated, StyleSheet, Easing, TouchableOpacity } from 'rea
 import { Constants } from '../constants/constants'; // update path as needed
 import CustomText from './CustomText';
 
-export default function WaitBooking({ onPress }) {
+export default function WaitBooking({ onPress, farePrice }) {
     const [seconds, setSeconds] = useState(0);
     const rotateAnim = useRef(new Animated.Value(0)).current;
     useEffect(() => {
@@ -47,6 +47,11 @@ export default function WaitBooking({ onPress }) {
                     />
                 </Animated.View> */}
                 <CustomText style={styles.timer}>{formatTime(seconds)}</CustomText>
+                <View style={styles.priceContainer}>
+                    <CustomText style={styles.price}>Fare:
+                        <CustomText style={styles.price2}> Php {farePrice}</CustomText>
+                    </CustomText>
+                </View>
             </View>
 
             <TouchableOpacity onPress={onPress} style={styles.cancelBtn}>
@@ -89,5 +94,23 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Bold',
         fontSize: Constants.SIZE.MEDIUM,
         color: Constants.COLORS.WHITE
+    },
+    price: {
+        fontSize: Constants.SIZE.MEDIUM,
+        color: Constants.COLORS.WHITE,
+        fontFamily: 'Montserrat',
+    },
+    price2: {
+        color: Constants.COLORS.WHITE,
+        fontSize: Constants.SIZE.MEDIUM,
+        fontFamily: 'Montserrat-Bold',
+    },
+    priceContainer: {
+        padding: Constants.PADDING.SMALL,
+        paddingLeft: Constants.PADDING.REGULAR,
+        paddingRight: Constants.PADDING.REGULAR,
+        borderRadius: Constants.BORDERS.RADIUS_SMALL,
+        marginTop: Constants.MARGIN.REGULAR,
+        backgroundColor: Constants.COLORS.RED
     }
 });
